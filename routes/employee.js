@@ -3,7 +3,8 @@ const app=express();
 const bodyParser=require('body-parser');
 const path = require('path');
 const mysql=require('mysql');
-var employee=require('./routes/employee');
+
+const router=express.Router();
 
 app.set('view engine','ejs');
 
@@ -11,13 +12,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-app.use('/employees',employee);
 
-/*app.get("/",function(req,res){
 
-	res.sendFile(path.join(__dirname,"./public","/MainTemplate.html"));
-
-})
 
 var db = mysql.createConnection({
   host: "localhost",
@@ -53,7 +49,7 @@ db.connect(function(err) {
 
 
 
-app.get("/employees",function(req,res){
+router.get("/",function(req,res){
 
 	let mainObject;
 	//let sql ="SELECT * FROM Employee where emp_id IN(SELECT emp_id FROM orders GROUP BY emp_id HAVING COUNT(emp_id)>2)";
@@ -82,7 +78,7 @@ app.get("/employees",function(req,res){
 	console.log("hi",check);
 });
 
-app.post("/filterEmployee",function(req,res){
+router.post("/filterEmployee",function(req,res){
 
 	console.log(req.body);
 	let reqBody=req.body;
@@ -237,7 +233,7 @@ app.post("/filterEmployee",function(req,res){
 
 
 
-app.post("/delEmployee",function(req,res){
+router.post("/delEmployee",function(req,res){
 
 	console.log(req.body);
 
@@ -254,7 +250,7 @@ app.post("/delEmployee",function(req,res){
 	})
 });
 
-app.get("/addEmployee",function(req,res){
+router.get("/addEmployee",function(req,res){
 
 
 	if(req.query.err){
@@ -268,7 +264,7 @@ app.get("/addEmployee",function(req,res){
 	
 });
 
-app.post("/addEmployee",function(req,res){
+router.post("/addEmployee",function(req,res){
 
 	console.log(req.body);
 	let info=req.body;
@@ -289,7 +285,7 @@ app.post("/addEmployee",function(req,res){
 });
 
 
-app.get("/viewEmployee",function(req,res){
+router.get("/viewEmployee",function(req,res){
 
 	let emp_id=req.query.emp_id;
 	if(emp_id){
@@ -362,7 +358,7 @@ app.get("/viewEmployee",function(req,res){
 
 });
 
-app.get("/getInfoEmployee",function(req,res){
+router.get("/getInfoEmployee",function(req,res){
 
 	console.log(req.query.emp_id);
 	let emp_id=req.query.emp_id;
@@ -389,7 +385,7 @@ app.get("/getInfoEmployee",function(req,res){
 });
 
 
-app.get("/viewAllOrders",function(req,res){
+router.get("/viewAllOrders",function(req,res){
 
 	console.log(req.query.emp_id);
 
@@ -409,7 +405,7 @@ app.get("/viewAllOrders",function(req,res){
 
 });
 
-app.post("/updateEmployee",function(req,res){
+router.post("/updateEmployee",function(req,res){
 
 	console.log(req.body);
 	let update=req.body;
@@ -447,11 +443,8 @@ app.post("/updateEmployee",function(req,res){
 	}
 
 
-});*/
+});
 
 
 
-
-app.listen(8000,function(){
-	console.log("server is responding on port 8000");
-})
+module.exports=router;

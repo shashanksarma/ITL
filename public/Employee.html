@@ -26,24 +26,14 @@
         </ul>
       </li>
       <li class="active"><a href="#">Products</a></li>
-      <li><a href="#">Employees</a></li>
+      <li><a href="/employees" class="active">Employees</a></li>
     </ul>
   </div>
 </nav>
   
 <div class="container">
-  <div class="col-lg-4" style="border-right: 5px solid black;position: fixed;left:0%;top:50px;height: 100%">
-    <div class="row" style="padding-top:50px ;border-bottom: 1px solid black;padding-bottom: 3%">
-      <p style="text-align: center;font-size: 11rem">S</p>
-    </div>
-    <div class="row">
-       <p>Do all the filter processing here</p>
-    </div>
-    
-   
-  </div>
   <div class="row">
-    <div class="col-lg-8" style="position: fixed;right:0%;top:50px;height: 100%">
+    <div class="col-lg-8">
   <h3>Do all the Object rendering here</h3>
   <h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3>
   <h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3>
@@ -52,24 +42,13 @@
   <h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3>
   <p></p>
 </div>
-  
+  <div class="col-lg-4" style="border-left: 5px solid black;position: fixed;right:0%;top:50px;height: 100%">
+    <h1 style="text-align: center;border-bottom: 2px solid black;">Filter</h1>
+    <p>Do all the filter processing here</p>
+  </div>
 </div>
 
 </div>
-<script >
-    let userObject=<%-JSON.stringify(userObject)%>
-  console.log("hii",userObject)
-
-  let sellObject=<%-JSON.stringify(sellObject)%>
-  console.log("hii2",sellObject);
-
-  let orderObject=<%-JSON.stringify(orderObject)%>
-   
-  console.log("hii3",orderObject);
-  
-  let update=<%-JSON.stringify(update)%>
-  console.log("hii4",update);
-</script>
 
 </body>
 </html>

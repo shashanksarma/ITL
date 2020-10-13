@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Update Previous order</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="neworder.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="#">Home</a></li>
+      <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Employees</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="col-lg-8" style="width:100%;background-image:url('prevord_cover.jpg');background-repeat:no-repeat;">
+	<form action="" name="MAIN" method="post">
+    <div class="fld">
+    	<fieldset class="fields" id="prod_details">
+        	<h4><strong>PAYMENT</strong></h4><hr>
+
+        	<table class="inp">
+            	<tr>
+                    <td class="c1">Order ID -</td>
+                    <td class="c2"><input type="text" name="order_id"></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Amount left -</td>
+                	<td class="c2">???</td>
+                </tr>
+            	<tr>
+                    <td class="c1">Current Payment -</td>
+                    <td class="c2"><input type="text" name="cur_paym"></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Payment Due -</td>
+                    <td class="c2"><input type="text" name="paym_due" value="???" readonly></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Payment Date -</td>
+                    <td class="c2"><input type="date" id="e" name="paym_date">
+                	<script>
+                        document.getElementById('e').value =
+                        new Date().toISOString().substring(0, 10);
+                	</script></td>
+                </tr>
+        	</table>
+            
+        	<center><input type="submit" value="SUBMIT" class="subm"></center>
+    	</fieldset>
+    </div>
+	</form>
+</div>
+</body>
+</html>

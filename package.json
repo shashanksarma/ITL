@@ -20,6 +20,10 @@
     "express": "*",
     "body-parser": "*",
     "mysql": "*",
-    "ejs": "*"
+    "ejs": "*",
+    "passport": "*",
+    "express-session": "*",
+    "passport-local": "*",
+    "cookie-parser": "*"
   }
 }

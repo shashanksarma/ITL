@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<style>
+  
+   #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:10%;
+  font-size: 18px;
+}
+#yesBtn{
+  position: relative;
+  top:24%;
+  left:30%;
+}
+#cancelBtn{
+  position: relative;
+  
+  left:50%;
+}
+
+
+
+</style>
+
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="/addEmployee">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li ><a href="#">Products</a></li>
+      
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="http://localhost:8000/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/employees/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <div class="col-lg-4" style="border-right: 5px solid black;position: fixed;left:0%;top:50px;height: 100%;overflow-y: auto" >
+    <div class="row" style="padding-top:15px ;border-bottom: 1px solid black;padding-bottom: 2%">
+      <p style="text-align: center;font-size: 11rem"><%=userObject[0].name[0]%></p>
+    </div>
+      <div id="infoDiv">
+        <div class="row" style="padding-top: 20px;">
+         <div class="col-lg-6">
+          <p><strong>EMP-ID :</strong> <span id="emp_id"><%=userObject[0].emp_id%></span></p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Name :</strong><span id="name"><%=userObject[0].name%> </span></p>
+         </div>
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>DOB :</strong><span id="dob"><%=userObject[0].dob%></span> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Join Date:</strong> <span id="joining_date"><%=userObject[0].joining_date%></span></p>
+         </div>
+        
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>Phone-No :</strong><span id="phone_no"><%=userObject[0].phone_no%></span> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Salary:</strong><span id="salary"><%=userObject[0].salary%></span> </p>
+         </div>
+        
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>Address:</strong><span id="address"><%=userObject[0].address%></span> </p> 
+         </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>City:</strong><span id="city"><%=userObject[0].city%></span> </p> 
+         </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>State:</strong><span id="state"><%=userObject[0].state%></span> </p> 
+         </div>
+         <div class="row" style="padding-top: 20px;padding-left: 40%">
+       
+         <button class="btn btn-default btn-md" style="background-color: black;color: white" onclick="edit();">Edit</button>
+         
+    </div>
+    </div>
+    </div>
+  
+  </div>
+    
+   
+  </div>
+  <div class="row">
+    <div class="col-lg-8" style="position: fixed;right:0%;top:50px;height: 100%;overflow-y: auto">
+      <div style="position:absolute;top:0px;left:17%">
+  <canvas id="myChart" width="600" height="270"></canvas>
+</div>
+<script src="../js/node_modules/chart.js/dist/chart.js"></script>
+  
+  
+  <div style="position: absolute;top:40%;left:1%;width: 100%">
+  <div class="row">
+    <h3 style="border-bottom: 2px solid black;text-align: center;border-top: 2px solid black;padding-top: 2px;padding-bottom: 2px" id="sellTag">Recent Sells</h3>
+
+  </div>
+  <div id="orderDiv">
+  <div class="row" style="padding-left: 10px">
+   <%if(sellObject.length>0){%> 
+  <%sellObject.forEach(function(item){%> 
+    <div class="col-lg-3" style="box-shadow: 2px 2px 5px 5px grey">
+      <div class="row">
+        <img src="">
+      </div>
+      <div class="row" style="padding-left: 7%">
+        <p><strong><a>Order-No:</a></strong><%=item.order_id%> </p>
+         <p><strong><a>Car-No:</a></strong><%=item.car_id%> </p>
+          <p><strong>Cust-Name:</strong><%=item.customer_id%> </p>
+      </div>
+    </div>
+    <div class= "col-lg-1" style="padding:10px"></div>
+    <%})%>
+    
+   
+    
+  </div>
+  <div class="row">
+    <h3 style="text-align: center;"><a onclick="viewAllOrders();">View all</a></h3>
+  </div>
+  
+ <%} else{%>
+    <div class="row">
+      <h2 style="text-align: center;">No Sells</h2>
+    </div>
+    <%}%>
+
+  
+</div>
+</div>
+</div>
+
+  
+</div>
+
+<div id="overlay">
+  
+
+  
+</div>
+<script >
+   $("input").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
+   window.onload = function () {
+    /* Grab all elements with a placeholder attribute */
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+}
+
+
+    let userObject=<%-JSON.stringify(userObject)%>
+  console.log("hii",userObject)
+
+  let sellObject=<%-JSON.stringify(sellObject)%>
+  console.log("hii2",sellObject);
+
+  let orderObject=<%-JSON.stringify(orderObject)%>
+   
+  console.log("hii3",orderObject);
+   let labels=[];
+   orderObject.filter(function(item){
+      labels.push(item['YEAR(dely_date)']);
+  });
+  console.log(labels);
+
+  let Cars_Sold=[];
+  orderObject.filter(function(item){
+    Cars_Sold.push(item.cars_sold);
+  })
+  console.log(Cars_Sold);
+  
+  let update=<%-JSON.stringify(update)%>
+  console.log("hii4",update);
+
+
+
+  var viewAllOrders=function(){
+
+    console.log("hello");
+    fetch("/employees/viewAllOrders?emp_id="+userObject[0].emp_id)
+    .then(response=>response.json())
+    .then(result=>{
+      console.log(result);
+
+
+
+      let orderDiv=document.getElementById('orderDiv');
+      let sellTag=document.getElementById('sellTag');
+
+      sellTag.innerHTML="All Sells";
+      orderDiv.innerHTML="";
+
+      for(var i=0;i<result.result.length;i++){
+
+        if(i%3==0){
+          orderDiv.innerHTML+="<div class='row' style='padding-left: 10px'>"
+        }
+
+        orderDiv.innerHTML+="<div class='col-lg-3' style='box-shadow: 2px 2px 5px 5px grey'>"+
+      "<div class='row'>"+
+        "<img src=''>"+
+      "</div>"+
+      "<div class='row' style='padding-left: 7%'>"+
+        "<p><strong><a>Order-No:</a></strong>"+result.result[i].order_id+" </p>"+
+         "<p><strong><a>Car-No:</a></strong>"+result.result[i].car_id+" </p>"+
+          "<p><strong>Cust-Name:</strong>"+result.result[i].customer_id+" </p>"+
+      "</div>"+
+    "</div>"+
+   " <div class= 'col-lg-1' style='padding:10px'></div>";
+    
+  
+    
+        if((i+1)%3==0||(i+1)==result.result.length){
+          orderDiv.innerHTML+="</div>";
+          orderDiv.innerHTML+="<div class= 'row' style='padding:30px'></div>";
+
+        }
+  
+  
+            
+
+      }
+      
+
+
+    })
+
+
+
+  }
+
+  let tempSave;
+
+  var edit=function(){
+    console.log("hi");
+
+
+
+    let infoDiv=document.getElementById("infoDiv");
+    tempSave=infoDiv.innerHTML;
+    console.log(tempSave);
+
+    infoDiv.innerHTML="<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-6'>"+
+          "<label>EMP-ID : </label><input type='text' class='form-control' name='emp_id' id='emp_id' placeholder="+userObject[0].emp_id+" defaultValue="+userObject[0].emp_id+">"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Name : </label><input type='text' class='form-control' name='name' id='name' placeholder='"+userObject[0].name+"' defaultValue='"+userObject[0].name+"'   >"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-6'>"+
+          "<label>DOB : </label><input type='date' class='form-control' name='dob' id='dob' placeholder='"+userObject[0].dob+"' defaultValue='"+userObject[0].dob+"' required>"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Date Join : </label><input type='date' class='form-control' name='joining_date' id='joining_date' defaultValue='"+userObject[0].joining_date+"' required>"+
+         "</div>"+
+        
+  
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+     "  <div class='col-lg-6'>"+
+          
+         "<label>Salary : </label><input type='number' class='form-control' name='salary' id='salary' min='100000' value="+userObject[0].salary+" placeholder="+userObject[0].salary+">"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Phone-No : </label><input type='number' class='form-control' name='phone_no' id='phone_no' value="+userObject[0].phone_no+" placeholder="+userObject[0].phone_no+ ">"+
+         "</div>"+
+        
+  
+   " </div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-12'>"+
+        "<label>Address :</label>"+
+       "<textarea name='address' form='empForm' style='width:100%' id='address' required>"+userObject[0].address+"</textarea>"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-6'>"+
+          "<label>City : </label><input type='text' class='form-control' name='city' id='city'value='"+userObject[0].city+"' placeholder='"+userObject[0].city+"' >"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>State : </label><input type='text' class='form-control' name='state' id='state' value='"+userObject[0].state+"' placeholder='"+userObject[0].state+"'>"+
+         "</div>"+
+         
+      
+  
+    "</div>"+
+         "<div class='row' style='padding-top: 10px;padding-left: 20%'>"+
+       
+         "<button class='btn btn-default btn-md' style='background-color: black;color: white' onclick='editFetch()'>Edit</button>"+
+         "<button class='btn btn-default btn-md' style='position: relative;left: 30%' type='button' onclick='cancelEdit();'>Cancel</button>"+
+         
+    "</div>";
+   // "</form>";"<form action='/employees/updateEmployee' method='POST' id='empForm'>"+
+
+
+
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+
+  }
+
+var cancelEdit=function(){
+  console.log("hi");
+
+  let infoDiv=document.getElementById('infoDiv');
+  infoDiv.innerHTML=tempSave;
+
+
+
+}
+
+
+var editFetch=function(){
+
+  console.log("hii");
+
+  let emp_id=document.getElementById('emp_id');
+  let name=document.getElementById('name');
+  let city=document.getElementById('city');
+  let state=document.getElementById('state');
+  let salary=document.getElementById('salary');
+  let joining_date=document.getElementById('joining_date');
+  let dob=document.getElementById('dob');
+  let address=document.getElementById('address');
+  let phone_no=document.getElementById('phone_no');
+  console.log(emp_id.value,name.value,city.value,state.value,salary.value,joining_date.value,dob.value,phone_no.value,address.value);
+
+  if(dob.value&&joining_date.value){
+
+    let updateInfo={
+    where:userObject[0].emp_id,
+    emp_id:emp_id.value,
+    name:name.value,
+    city:city.value,
+    state:state.value,
+    salary:salary.value,
+    joining_date:joining_date.value,
+    dob:dob.value,
+    address:address.value,
+    phone_no:phone_no.value
+  }
+
+  console.log(updateInfo);
+
+  fetch("/employees/updateEmployee",{
+      method:"POST",
+      headers:{
+      'Content-Type':'application/json;charset=utf-8'
+      },
+      body:JSON.stringify(updateInfo)
+    }).then(response=>response.json())
+    .then(result=>{
+      console.log(result);
+      if(result.done){
+
+        let infoDiv=document.getElementById('infoDiv');
+        infoDiv.innerHTML=tempSave;
+
+        document.getElementById('emp_id').innerHTML=result.update[0].emp_id;
+        document.getElementById('name').innerHTML=result.update[0].name;
+        document.getElementById('city').innerHTML=result.update[0].city;
+        document.getElementById('state').innerHTML=result.update[0].state;
+        document.getElementById('salary').innerHTML=result.update[0].salary;
+        document.getElementById('joining_date').innerHTML=result.update[0].joining_date;
+        document.getElementById('dob').innerHTML=result.update[0].dob;
+        document.getElementById('address').innerHTML=result.update[0].address;
+        document.getElementById('phone_no').innerHTML=result.update[0].phone_no;
+
+        on("The information of the employee has been updated.");
+        
+
+
+      } else{
+
+        on("There were some errors in the input you provided.");
+
+      }
+
+
+    })
+
+
+
+
+  }
+
+}
+
+function on(item) {
+  document.getElementById("overlay").style.display = "block";
+  let overlay=document.getElementById('overlay');
+              overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                "<div id='warning' >"+
+                  "<p id='textMsg'>"+item+"<br></p>"+
+                "</div>"+
+                "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                  "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+                "</div>"+
+                
+              "</div>"
+
+
+
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '# of Cars_Sold',
+            data: Cars_Sold,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1,
+            width:1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes:[{
+              barPercentage:0.3
+            }]
+        }
+    }
+});
+
+
+console.log("hii chart implemented");
+
+
+
+
+
+
+/**/
+
+</script>
+
+</body>
+</html>

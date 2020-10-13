@@ -35,7 +35,9 @@ db.connect(function(err) {
   //let sql="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee,Orders  where Employee.emp_id=Orders.emp_id  AND (Orders.emp_id =(SELECT Employee.emp_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id  AND YEAR(Orders.dely_date)=('2020') GROUP BY Orders.emp_id order by COUNT(Orders.emp_id) desc LIMIT 1) OR Orders.emp_id =( SELECT emp_id FROM Employee where emp_id='E00004') OR Orders.emp_id= (SELECT emp_id FROM Employee where name='Param Patil'))GROUP BY Orders.emp_id ";
   //let sql="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
-  let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
+  //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
+  
+  let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
@@ -50,11 +52,13 @@ db.connect(function(err) {
 
 
 router.get("/",function(req,res){
-
-	let mainObject;
+	if(req.user){
+		let mainObject;
+	console.log(req.user);
 	//let sql ="SELECT * FROM Employee where emp_id IN(SELECT emp_id FROM orders GROUP BY emp_id HAVING COUNT(emp_id)>2)";
 	//let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee,Orders  where Employee.emp_id=Orders.emp_id GROUP BY Orders.emp_id";
-	let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id order by cars_sold desc LIMIT 4";
+	//let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id order by cars_sold desc LIMIT 4";
+	let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc LIMIT 4";
 	let check;
 	db.query(sql,function(err,result){
 		console.log(result);
@@ -72,10 +76,16 @@ router.get("/",function(req,res){
 			
 		});
 	})
+	console.log("hi",check);
+
+	} else{
+		res.redirect('/login');
+	}
+	
 		
 	//res.sendFile(path.join(__dirname,"./public","/Employee.html"));
 	
-	console.log("hi",check);
+	
 });
 
 router.post("/filterEmployee",function(req,res){
@@ -87,7 +97,8 @@ router.post("/filterEmployee",function(req,res){
 	let sql ="SELECT Employee.emp_id,Employee.name,Employee.salary,Employee.state,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id HAVING";//(Employee.emp_id='E00001') OR (Employee.name='Param Patil') OR (Employee.salary>100000 AND Employee.salary<=700000 AND Employee.state='Maharashtra')";
 	let checkObject={};
 	let addOR=false;
-	let sql1="SELECT Employee.emp_id,Employee.name,Employee.salary,Employee.state,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id ";
+	//let sql1="SELECT Employee.emp_id,Employee.name,Employee.salary,Employee.state,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id ";
+	let sql1="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id ";
 	let entered=false;
 
 	if(reqBody.year&&reqBody.year.length>0){
@@ -237,7 +248,7 @@ router.post("/delEmployee",function(req,res){
 
 	console.log(req.body);
 
-	let sql="DEL FROM Employee where Employee.emp_id='"+req.body.item+"' ";
+	let sql="DELETE FROM Employee where Employee.emp_id='"+req.body.item+"' ";
 	console.log(sql);
 	db.query(sql,function (err,result) {
 		if(err){
@@ -252,14 +263,18 @@ router.post("/delEmployee",function(req,res){
 
 router.get("/addEmployee",function(req,res){
 
+	if(req.user){
+		if(req.query.err){
+			console.log("yesss reached");
+			res.render('addEmployee',{err:true})
+		}else{
+			res.render('addEmployee',{err:false});
 
-	if(req.query.err){
-		console.log("yesss reached");
-		res.render('addEmployee',{err:true})
-	}else{
-		res.render('addEmployee',{err:false});
-
+		}
+	} else{
+		res.redirect("/login");
 	}
+	
 
 	
 });
@@ -268,15 +283,15 @@ router.post("/addEmployee",function(req,res){
 
 	console.log(req.body);
 	let info=req.body;
-	let sql="INSERT ITO Employee VALUES('"+info.emp_id+"','"+info.name+"','"+info.address+"','"+info.city+"','"+info.state+"','"+info.dob+"','"+info.joining_date+"',"+info.salary+","+info.phone_no+")";
+	let sql="INSERT INTO Employee VALUES('"+info.emp_id+"','"+info.name+"','"+info.address+"','"+info.city+"','"+info.state+"','"+info.dob+"','"+info.joining_date+"',"+info.salary+","+info.phone_no+")";
 	console.log(sql);
 	db.query(sql,function(err,result){
 		if(err){
-			res.redirect("/addEmployee?err=true");
+			res.redirect("/employees/addEmployee?err=true");
 		}
 		else{
 			console.log(result);
-			res.redirect("/employees");
+			res.redirect("/employees/viewEmployee?emp_id="+info.emp_id);
 		}
 	})
 
@@ -287,7 +302,9 @@ router.post("/addEmployee",function(req,res){
 
 router.get("/viewEmployee",function(req,res){
 
-	let emp_id=req.query.emp_id;
+	if(req.user){
+
+		let emp_id=req.query.emp_id;
 	if(emp_id){
 		console.log("hii",req.query.update);
 		let userObject;
@@ -302,11 +319,12 @@ router.get("/viewEmployee",function(req,res){
 				userOBject=result;
 				let sellObject;
 
-				let sql1="SELECT YEAR(dely_date),COUNT(YEAR(dely_date)) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id HAVING Employee.emp_id='"+emp_id+"'";
+				let sql1="SELECT YEAR(dely_date),COUNT(YEAR(dely_date)) AS cars_sold,Employee.emp_id FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id where Employee.emp_id='"+emp_id+"' GROUP BY YEAR(dely_date)";
 				db.query(sql1,function(err,result1){
 
 					if(err){
-						res.redirect("/employees");
+						//res.redirect("/employees");
+						console.log("yess error found");
 					} else{
 
 						console.log(result1,"hee2");
@@ -350,9 +368,19 @@ router.get("/viewEmployee",function(req,res){
 
 		});
 	} else{
+
 		res.redirect("/employees");
+
 	}
 
+
+	} else{
+
+		res.redirect("/login");
+
+	}
+
+	
 
 	
 
@@ -360,47 +388,63 @@ router.get("/viewEmployee",function(req,res){
 
 router.get("/getInfoEmployee",function(req,res){
 
-	console.log(req.query.emp_id);
-	let emp_id=req.query.emp_id;
-	if(emp_id){
+	if(req.user){
 
-		let sql="SELECT * FROM Employee where emp_id='"+emp_id+"'";
-		deb.query(sql,function(err,result){
+		console.log(req.query.emp_id);
+		let emp_id=req.query.emp_id;
+		if(emp_id){
 
-			if(err){
-				console.log(err);
-				res.json({done:false,result:undefined})
-			} else{
+			let sql="SELECT * FROM Employee where emp_id='"+emp_id+"'";
+			deb.query(sql,function(err,result){
 
-				console.log(result);
-				res.json({done:true,result:result});
+				if(err){
+					console.log(err);
+					res.json({done:false,result:undefined})
+				} else{
 
-			}
+					console.log(result);
+					res.json({done:true,result:result});
 
-		})
+				}
+
+			})
 
 
-	}
+		}
+
+	} else{
+
+		res.redirect("/login");
+	}	
+	
 
 });
 
 
 router.get("/viewAllOrders",function(req,res){
 
-	console.log(req.query.emp_id);
+	if(req.user){
+		console.log(req.query.emp_id);
 
-	let emp_id=req.query.emp_id;
-	let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.customer_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"'";
-	db.query(sql2,function(err,result){
+		let emp_id=req.query.emp_id;
+		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.customer_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"'";
+		db.query(sql2,function(err,result){
 
-		if(err){
-			throw err;
-		} else{
-			console.log(result);
-			res.json({result:result});
-		}
+			if(err){
+				throw err;
+			} else{
+				console.log(result);
+				res.json({result:result});
+			}
 
-	})
+		})
+	} else{
+
+		res.redirect("/login");
+
+	}
+
+	
 
 
 });
@@ -412,19 +456,22 @@ router.post("/updateEmployee",function(req,res){
 
 	if(update){
 
-		let sql="UPDATE Employee set emp_id='"+update.emp_id+"',name='"+update.name+"', address='"+update.address+"',city='"+update.city+"',state='"+update.state+"',dob='"+update.dob+"',joining_date='"+update.joining_date+"',salary="+update.salary+",phone_no="+update.phone_no+" where emp_id='"+update.emp_id+"'";
+		let sql="UPDATE Employee set emp_id='"+update.emp_id+"',name='"+update.name+"', address='"+update.address+"',city='"+update.city+"',state='"+update.state+"',dob='"+update.dob+"',joining_date='"+update.joining_date+"',salary="+update.salary+",phone_no="+update.phone_no+" where emp_id='"+update.where+"'";
 		db.query(sql,function(err,result){
 
 			if(err){
 				console.log(err);
-				res.redirect("/viewEmployee?emp_id="+update.where+"&&update=error");
+				//res.redirect("/employees/viewEmployee?emp_id="+update.where+"&&update=error");
+				res.json({done:false})
 			} else{
 				console.log(result);
 
 				sql="SELECT *FROM Employee where emp_id='"+update.emp_id+"'";
 				db.query(sql,function(err,result1){
 					console.log(result1);
-					res.redirect("/viewEmployee?emp_id="+update.emp_id+"&&update=done");
+					//res.redirect("/employees/viewEmployee?emp_id="+update.emp_id+"&&update=done");
+					let update=result1;
+					res.json({done:true,update});
 
 				})
 
@@ -442,6 +489,87 @@ router.post("/updateEmployee",function(req,res){
 
 	}
 
+
+});
+
+
+router.post("/giveAccess",function(req,res){
+
+	console.log(req.query.emp_id,"inside give");
+
+	let emp_id=req.query.emp_id;
+
+	let sql="INSERT INTO tempSign VALUES('"+emp_id+"')";
+	db.query(sql,function(err,result){
+
+		if(err) throw err;
+
+		console.log(result);
+
+		res.redirect("/employees");
+
+
+
+	})
+
+
+
+
+
+	
+
+});
+
+router.post("/takeAccess",function(req,res){
+
+	console.log(req.query.emp_id,"inside takes");
+
+	let emp_id=req.query.emp_id;
+
+	let sql="SELECT *FROM tempSign where emp_id='"+emp_id+"'";
+	db.query(sql,function(err,result){
+
+		if(err) throw err;
+
+		console.log(result);
+
+		if(result.length){
+
+			let sql1="DELETE FROM tempSign where emp_id='"+emp_id+"'";
+			db.query(sql1,function(err,result1){
+
+				if(err) throw err;
+
+				console.log(result1);
+				res.redirect("/employees");
+
+			})
+
+		} else{
+
+			let sql1="DELETE FROM perSign where emp_id='"+emp_id+"'";
+			db.query(sql1,function(err,result1){
+
+				if(err) throw err;
+
+				console.log(result1);
+				res.redirect("/employees");
+
+			})
+
+
+
+		}
+
+
+
+	})
+
+
+
+
+
+	
 
 });
 

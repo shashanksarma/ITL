@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Place New Order</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/neworder.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="#">Home</a></li>
+      <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Employees</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="col-lg-8" style="width:100%;background-image:url('../images/neword_cover.jpeg');background-repeat:no-repeat;">
+	<form action="/order/createOrder" method="POST">
+
+    <div class="fld">
+    	<fieldset class="fields" id="prod_details">
+        	<h4><strong>PRODUCT DETAILS</strong></h4><hr>
+
+        	<table class="inp">
+                <tr><td colspan="2">Select type of product :</tr></td>
+            	<tr>
+                    <td><input type="checkbox" id="carr" name="prod_type" value="car" >
+            	    <label for="carr">&nbsp;Car</label></td>
+                    <td><input type="checkbox" id="extraa" name="prod_type" value="extras">
+            	    <label for="extraa">&nbsp;Car Extras</label><br></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Select the car -</td>
+                    <td class="c2"><input list="Cars" name="car_model" placeholder="Search.." required>
+            	    <datalist id="Cars"></datalist></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Select extras -</td>
+                    <td class="c2"><input list="Extras" name="extra" placeholder="Search..">
+            	    <datalist id="Extras"></datalist></td>
+                </tr>
+        	</table>
+    	</fieldset>
+    	<fieldset class="fields" id="order_specs">
+        	<h4>ORDER SPECIFICATIONS</h4><hr>
+
+        	<table class="inp">
+            	<tr>
+                    <td class="c1">Employee ID -</td>
+                    <td class="c2"><input list="Employees" name="emp_id" placeholder="Search.." required>
+                	<datalist id="Employees"></datalist></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Client Name -</td>
+                    <td class="c2"><input type="text" name="client_name"></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Address -</td>
+                    <td class="c2">
+                	<textarea name="client_addr" rows="3" columns="12" style="width:200px;" required></textarea></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Phone No -</td><td class="c2">
+                	<input type="text" name="phone2" size="13"> &nbsp;
+                    <input type="text" name="phone1" size="13" required></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Email ID -</td>
+                    <td class="c2"><input type="text" name="email" required></td>
+                </tr>
+        	</table>
+    	</fieldset>
+    	<fieldset class="fields" id="paym_details">
+        	<h4 class="Legends">PAYMENT</h4><hr>
+
+        	<table class="inp">
+                <tr><td colspan="2">Payment Method</td></tr>
+            	<tr>
+                    <td><input type="radio" id="comp" name="pay_method" value="complete">
+                	<label for="comp">&nbsp;Complete</label></td>
+                	<td><input type="radio" id="inst" name="pay_method" value="installment">
+                	<label for="inst">&nbsp;Installments</label></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Current Payment -</td>
+                    <td class="c2"><input type="text" name="cur_amt" required></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Total amount -</td>
+                	<td class="c2"><input type="text" name="total_amt" required></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Payment Due -</td>
+                    <td class="c2"><input type="text" name="pay_due" value="???" readonly></td>
+                </tr>
+            	<tr>
+                    <td class="c1">Payment Date -</td>
+                    <td class="c2"><input type="date" id="e" name="pay_date">
+                	<script>
+                        document.getElementById('e').value =
+                        new Date().toISOString().substring(0, 10);
+                    </script></td>
+                </tr>
+        	</table>
+
+        	<center><input type="submit" value="SUBMIT" class="subm"></center>
+    	</fieldset>
+    </div>
+    </form>
+</div>
+</body>
+</html>

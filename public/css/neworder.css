@@ -1,0 +1,84 @@
+body{
+	background-color:rgb(240,240,240);
+	color:#666;
+}
+
+div.fld{
+	margin-top:25%;
+	margin-bottom:3%;
+}
+
+hr{
+	border:2px solid red;
+	border-radius:5px;
+}
+
+fieldset{
+	background-color:rgb(250,250,250);
+	box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	font-size:15px;
+	width:60%;
+	padding:30px;
+	padding-left:50px;
+	padding-right:50px;
+	margin:auto;
+	margin-top:30px;
+}
+
+input{
+	padding:5px;
+	border: 1px solid #ccc;
+	border-bottom: 1px solid red;
+    border-radius: 4px;
+}
+
+input[list]{
+	padding-left:25px;
+	background-image:url('searchico.png');
+	background-size:7%;
+	background-position: 5px 5px; 
+	background-repeat:no-repeat;
+}
+
+textarea {
+	padding:5px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+input.subm{
+	border:none;
+	padding:7px;
+	padding-left:13px;
+	padding-right:13px;
+	margin:20px;
+	margin-bottom:0px;
+	background-color:rgb(230,30,30);
+	color:white;
+	font-family:Calibri;
+}
+
+input.subm:hover{
+	background-color:white;
+	color:tomato;
+	box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h4{
+	color:black;
+	font-family:Franklin Gothic Heavy;
+}
+
+table, tr, th, td{
+	padding:7px;
+	margin:auto;
+}
+
+td.c1{
+	vertical-align:top;
+	width:150px;
+	padding-top:15px;
+}
+td.c2{
+	width:350px;
+}

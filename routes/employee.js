@@ -16,9 +16,8 @@ app.use(bodyParser.json());
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "shashank@123",
-  database : "miniproject"
-
+  password: "",
+  database : "CarShowroom"
 });
 
 db.connect(function(err) {
@@ -35,7 +34,8 @@ db.connect(function(err) {
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
   //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
 
-  let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
+  //let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
+  let sql="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.customer_id,Orders.extra_id,customer.name FROM Employee,Orders,customer where Employee.emp_id=Orders.emp_id AND customer.cust_id=Orders.customer_id AND Employee.emp_id='E00001'";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
@@ -332,7 +332,8 @@ router.get("/viewEmployee",function(req,res){
 						sellObject=result1;
 						let orderObject;
 
-						let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"' order by Orders.dely_date desc LIMIT 3";
+						//let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"' order by Orders.dely_date desc LIMIT 3";
+						let sql="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id,customer.name FROM Employee,Orders,customer where Employee.emp_id=Orders.emp_id AND customer.cust_id=Orders.cust_id AND Employee.emp_id='"+emp_id+"' order by Orders.dely_date desc LIMIT 3";
 						db.query(sql2,function(err,result2){
 
 							if(err){
@@ -428,7 +429,8 @@ router.get("/viewAllOrders",function(req,res){
 		console.log(req.query.emp_id);
 
 		let emp_id=req.query.emp_id;
-		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"'";
+		//let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id,customer.name FROM Employee,Orders,customer where Employee.emp_id=Orders.emp_id AND customer.cust_id=Orders.cust_id AND Employee.emp_id='"+emp_id+"'";
+		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id,customer.name FROM Employee,Orders,customer where Employee.emp_id=Orders.emp_id AND customer.cust_id=Orders.cust_id AND Employee.emp_id='"+emp_id+"'";
 		db.query(sql2,function(err,result){
 
 			if(err){

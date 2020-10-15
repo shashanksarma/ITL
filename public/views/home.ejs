@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../css/neworder.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="../node_modules/chart.js/dist/chart.js"></script>
+  <script src="../js/node_modules/chart.js/dist/Chart.js"></script>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
         <a class="navbar-brand" href="#">CarShowroom</a>
       </div>
       <ul class="nav navbar-nav">
-        <li ><a href="/home">Home</a></li>
+        <li class="active"><a href="/home">Home</a></li>
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">View Order</a></li>
@@ -27,7 +27,7 @@
             <li><a href="/order/prevOrder">Previous Order</a></li>
           </ul>
         </li>
-        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+        <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/product/addproduct">New Product</a></li>
           <li><a href="/product">View Product</a></li>
@@ -38,7 +38,7 @@
       </li>
 
 
-          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+          <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/employees/addEmployee">New Employee</a></li>
             <li><a href="/employees">View Employee</a></li>
@@ -60,7 +60,7 @@ hi
 <div class="home1">
     <h1 class="banner1">FIND CARS<br>SPECIAL FOR YOU</h1>
     <h2 class="ban-sub">With hundreds of products,<br>we have just the right one for you</h2>
-    <button class="btn1" onclick="document.location=''"><strong>EXPLORE &nbsp;PRODUCTS</strong></button>
+    <a href="/product"><button class="btn1" onclick="document.location=''"><strong>EXPLORE &nbsp;PRODUCTS</strong></button></a>
 </div>
 <div class="ad1">
     <h1 class="ad1h">- MEET THE SEDAN FAMILY -</h1><br>
@@ -89,8 +89,9 @@ hi
                 sleek accessories and leather uphoistery inspired by European high-performance grand tourers.</p>
                 <div style="width:400px;">
                     <center>
+                        <a href="/product/viewProduct?car_id=C00002">
                         <button class="btn1" style="padding:10px;font-size:15px;" onclick="document.location=''">
-                            <strong>View this car</strong>
+                            <strong>View this car</strong></a>
                     </button></center>
                 </div>
             </td>
@@ -100,7 +101,7 @@ hi
 </div>
 <!--<div class="contain">-->
 <br><br><h1 class="ad1h">Our Statistics</h1><br>
-    <div class="chart"><canvas id="chart1"></canvas><br></div>
+    <div class="chart"><canvas id="myChart" width="600" height="270"></canvas><br></div>
     <div class="chart"><canvas id="chart2"></canvas><br></div>
 <!--</div>-->
 <div class="abt">
@@ -120,8 +121,8 @@ hi
     let Cars_Sold=[];
     let Cars_Sold_name=[];
   carObject.filter(function(item){
-    Cars_Sold.push(item.cars_count);
-    Cars_Sold_name.push(item.car_model);
+    Cars_Sold.push(item.car_count);
+    Cars_Sold_name.push(item.model_no);
   })
 
 let orderObject=<%-JSON.stringify(orderData)%>;
@@ -136,9 +137,9 @@ let orderObject=<%-JSON.stringify(orderData)%>;
 
 
 
-    var chart1 = document.getElementById('chart1').getContext('2d');
-    var chart2 = document.getElementById('chart2').getContext('2d');
-    var carChart = new Chart(chart1, {
+    var ctx = document.getElementById('myChart');
+    var ctx2 = document.getElementById('chart2');
+    /*var carChart = new Chart(chart1, {
         type: 'bar',
         data: {
             labels: Cars_Sold_name,
@@ -151,8 +152,8 @@ let orderObject=<%-JSON.stringify(orderData)%>;
             }]
         },
         options: {}
-    });
-    var saleChart = new Chart(chart2, {
+    });*/
+    /*var saleChart = new Chart(chart2, {
         type: 'bar',
         data: {
             labels: Order_Sold_name,
@@ -165,7 +166,94 @@ let orderObject=<%-JSON.stringify(orderData)%>;
             }]
         },
         options: {}
-    });
+    });*/
+
+
+    var myChart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: Order_Sold_name,
+        datasets: [{
+            label: '# of sales',
+            data: Order_Sold,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1,
+            width:1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes:[{
+              barPercentage:0.3
+            }]
+        }
+    }
+});
+
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: Cars_Sold_name,
+        datasets: [{
+            label: '# of Cars_Sold',
+            data: Cars_Sold,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1,
+            width:1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes:[{
+              barPercentage:0.3
+            }]
+        }
+    }
+});
+
+
+
+
 </script>
 </body>
 </html>

@@ -70,15 +70,15 @@
         <a class="navbar-brand" href="#">CarShowroom</a>
       </div>
       <ul class="nav navbar-nav">
-        <li ><a href="/employees">Home</a></li>
+        <li ><a href="/home">Home</a></li>
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">View Order</a></li>
-            <li><a href="#">Place Order</a></li>
-            <li><a href="#">Previous Order</a></li>
+            <li><a href="/order/placeOrder">Place Order</a></li>
+            <li><a href="/order/prevOrder">Previous Order</a></li>
           </ul>
         </li>
-        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+        <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/product/addproduct">New Product</a></li>
           <li><a href="/product">View Product</a></li>
@@ -100,6 +100,7 @@
       </ul>
     </div>
   </nav>
+
 
 <div class="container">
   <div class="col-lg-4" style="border-right: 5px solid black;position: fixed;left:0%;top:50px;height: 100%;overflow-y: auto" >
@@ -186,7 +187,7 @@
       <div class="row" style="padding-left: 7%">
         <p><strong><a>Order-No:</a></strong><%=item.order_id%> </p>
          <p><strong><a href="/product/viewProduct?car_id=<%=item.car_id%>">Car-No:</a></strong><%=item.car_id%> </p>
-          <p><strong>Cust-Name:</strong><%=item.cust_id%> </p>
+          <p><strong>Cust-Name:</strong><%=item.name%> </p>
       </div>
     </div>
     <div class= "col-lg-1" style="padding:10px"></div>
@@ -318,7 +319,7 @@
       "<div class='row' style='padding-left: 7%'>"+
         "<p><strong><a>Order-No:</a></strong>"+result.result[i].order_id+" </p>"+
          "<p><strong><a href='/product/viewProduct?car_id="+result.result[i].car_id+"'>Car-No:</a></strong>"+result.result[i].car_id+" </p>"+
-          "<p><strong>Cust-Name:</strong>"+result.result[i].customer_id+" </p>"+
+          "<p><strong>Cust-Name:</strong>"+result.result[i].name+" </p>"+
       "</div>"+
     "</div>"+
    " <div class= 'col-lg-1' style='padding:10px'></div>";

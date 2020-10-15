@@ -1,6 +1,6 @@
 @font-face {
 	font-family:header1;
-	src: url('fonts/rob/Roboto-Light.ttf');
+	src: url('../fonts/rob/Roboto-Light.ttf');
 }
 
 body{
@@ -18,7 +18,7 @@ div.home1{
 	margin-top:40px;
 	width:100%;
 	height:450px;
-	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('images/home-cover.jpg');
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../images/home-cover.jpg');
 	background-repeat:no-repeat;
 	padding-left: 100px;
 	padding-top: 130px;
@@ -38,7 +38,7 @@ div.ad2{
 	width:100%;
 	height:450px;
 	padding-top: 20px;
-	background-image:url('images/adv1.png');
+	background-image:url('../images/adv1.png');
 	background-size:cover;
 	box-shadow:0 0px 14px 0 rgba(0, 0, 0, 0.32), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
 }
@@ -94,7 +94,7 @@ input{
 
 input[list]{
 	padding-left:25px;
-	background-image:url('searchico.png');
+	background-image:url('../images/searchico.png');
 	background-size:7%;
 	background-position: 5px 5px;
 	background-repeat:no-repeat;
@@ -228,3 +228,13 @@ td.ad1_arrow:hover{
 img.sedan{
 	width:250px;
 }
+
+a{
+	color:white;
+	text-decoration:none;
+ 
+}
+ a:hover{
+ 	color: black;
+ 	text-decoration:none;
+ }

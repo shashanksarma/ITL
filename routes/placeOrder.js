@@ -55,7 +55,7 @@ db.connect(function(err) {
   //let sql="SELECT * FROM Orders";
   //let sql="INSERT INTO Orders VALUES('O00111','2019-10-13','2019-10-15','C00002','010207','E00004','P00111',null)";
   //let sql="SELECT * FROM Orders where order_id='O00111'";
-  let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
+  //let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
   let sql="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
   db.query(sql,function(err,result){
 		if(err) throw err;
@@ -102,7 +102,7 @@ router.get("/placeOrder",check,function(req,res){
 				console.log(result2,"emp_id");
 
 				if(req.query.Order_status){
-					res.render("new_order",{car:result,extra:result1,emp_id:result2,condition:req.query.condition});
+					res.render("new_order",{car:result,extra:result1,emp_id:result2,condition:req.query.Order_status});
 
 				} else{
 					res.render("new_order",{car:result,extra:result1,emp_id:result2,condition:"first"});

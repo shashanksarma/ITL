@@ -48,10 +48,11 @@ db.connect(function(err) {
   //let sql="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee,Orders  where Employee.emp_id=Orders.emp_id  AND (Orders.emp_id =(SELECT Employee.emp_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id  AND YEAR(Orders.dely_date)=('2020') GROUP BY Orders.emp_id order by COUNT(Orders.emp_id) desc LIMIT 1) OR Orders.emp_id =( SELECT emp_id FROM Employee where emp_id='E00004') OR Orders.emp_id= (SELECT emp_id FROM Employee where name='Param Patil'))GROUP BY Orders.emp_id ";
   //let sql="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
-  let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
+  //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
   //let sql="CREATE TABLE perSign(emp_id varchar(6),password varchar(20))";
   //let sql="CREATE TABLE tempSign(emp_id varchar(6))";
   //let sql="INSERT INTO tempSign VALUES('E00001'),('E00003'),('E00004'),('E00007')";
+  let sql='SELECT COUNT(Orders.car_id) as car_count,car_details.model_no FROM Orders LEFT JOIN car_details on car_details.car_id=Orders.car_id GROUP BY Orders.car_id order by car_count desc LIMIT 4';
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
@@ -144,15 +145,16 @@ passport.use("local-signUp",new LocalStrategy({passReqToCallback:true},
 	}))
 
 
-router.get("/",function(req,res){
+router.get("/home",function(req,res){
 
 	console.log("user visiting home page");
-	let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
+	//let sql='SELECT COUNT(car_id) as car_count,model_no FROM Orders LEFT JOIN car_details on car_id=order_id GROUP BY car_id order by car_count desc LIMIT 4';
+	let sql='SELECT COUNT(Orders.car_id) as car_count,car_details.model_no FROM Orders LEFT JOIN car_details on car_details.car_id=Orders.car_id GROUP BY Orders.car_id order by car_count desc LIMIT 4';
 	  db.query(sql,function(err,result){
 			if(err) throw err;
 			console.log(result);
 
-	  		let sql1="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
+	  		let sql1="SELECT COUNT(MONTH(dely_date)) as sell_count,MONTH(dely_date) as month FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
 
 			db.query(sql1,function(err,result1){
 

@@ -1,11 +1,13 @@
 const mysql= require("mysql");
 
 var mysqlConnection=mysql.createConnection({   //this is to create the connection object b/w node and database
-  host:"localhost",
-  user:"root",
-  password:"shashank@123",
-  database:"miniproject",
-  multipleStatements:true
+
+  host: "localhost",
+  user: "root",
+  password: "",
+  database : "CarShowroom"
+
+
 });
 
 mysqlConnection.connect(function(err){

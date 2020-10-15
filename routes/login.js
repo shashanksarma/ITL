@@ -30,8 +30,8 @@ passport.deserializeUser(function(user,done){
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "shashank@123",
-  database : "miniproject"
+  password: "",
+  database : "CarShowroom"
 
 });
 
@@ -55,7 +55,7 @@ db.connect(function(err) {
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
-
+		
 	});
 
 
@@ -70,7 +70,7 @@ passport.use("local-sigin",new LocalStrategy({passReqToCallback:true},
 
 			if(result.length>0&&result[0].password==password){
 
-				done(null,{username:username,password:password});
+				done(null,{username:username,password:password});			
 
 			} else{
 				done(null,false);
@@ -78,7 +78,7 @@ passport.use("local-sigin",new LocalStrategy({passReqToCallback:true},
 
 		})
 
-
+			
 	}
 ));
 
@@ -144,7 +144,28 @@ passport.use("local-signUp",new LocalStrategy({passReqToCallback:true},
 	}))
 
 
+router.get("/",function(req,res){
 
+	console.log("user visiting home page");
+	let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
+	  db.query(sql,function(err,result){
+			if(err) throw err;
+			console.log(result);
+
+	  		let sql1="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
+
+			db.query(sql1,function(err,result1){
+
+				if(err) throw err;
+				console.log(result1);
+
+				res.render("home",{orderData:result1,carData:result});
+
+			})
+			
+	});
+
+})
 
 
 
@@ -169,7 +190,7 @@ router.get("/signUp",function(req,res){
 
 router.post("/signUp",passport.authenticate('local-signUp',{
 	successRedirect:"/employees",
-	failureRedirect:"/signUp?condition=emp-id already exists or you cannot have access"
+	failureRedirect:"/signUp?condition=emp-id already exists or you don't have access"
 }))
 
 router.post("/login",passport.authenticate("local-sigin",{

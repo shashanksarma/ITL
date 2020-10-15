@@ -18,8 +18,8 @@ app.use(bodyParser.json());
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "shashank@123",
-  database : "miniproject"
+  password: "",
+  database : "CarShowroom"
 
 });
 
@@ -36,39 +36,80 @@ db.connect(function(err) {
   //let sql="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
   //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
-
-  /*let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
+  
+  //let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
+  //let sql="CREATE TABLE payment (payment_id varchar(6) Primary Key Check(payment_id like 'P%'),paid_amount int,payment_method varchar(20) Check (payment_method IN ('Cheque','BankTransfer','DD','EMI','Cash')),total_cost int)";
+  //let sql="INSERT INTO payment VALUES('P00003',700000,'DD',1000000),('P00004',1000000,'Cheque',1200000),('P00008',500000,'Cheque',500000),('P00009',1200000,'EMI',1500000)";
+  //let sql="SELECT * FROM payment";
+  //let sql="SELECT Orders.order_id,payment.total_cost,payment.paid_amount FROM Orders,payment where Orders.payment_id=payment.payment_id AND Orders.payment_id IN(SELECT payment.payment_id FROM payment where payment.total_cost>payment.paid_amount)";
+  //let sql="CREATE TABLE car_details(car_id varchar(6) Primary Key Check(car_id like 'C%'),price int not null check(price>0),fuel_type varchar(10) check(fuel_type IN ('Petrol','Diesel')),color varchar(10) not null,model_no varchar(10) Not Null,year int not null,qty_available int check(qty_available>=0),transmission varchar(10) check(transmission IN('Manual','Automatic')),capacity int not null check(capacity>0),type varchar(10) not null check(type IN('SUV','Sedan','Hatchback','Sports'))) "
+  //let sql="INSERT INTO car_details VALUES('C00003',400000,'Diesel','Blue','ABC500',2019,19,'Automatic',5,'Sedan'),('C00004',1400000,'Diesel','Black','SCX200',2020,21,'Manual',2,'Sports'),('C00006',1100000,'Petrol','Grey','CD99',2020,22,'Automatic',5,'Hatchback'),('C00008',1000000,'Petrol','Red','GLS201',2020,14,'Manual',5,'SUV')";
+  //let sql="SELECT * FROM car_details";
+  //let sql="CREATE TABLE extra (extra_id varchar(6) Primary Key Check(extra_id like 'EX%'),name varchar(20) not null,price int not null check(price>0),type varchar(10) not null check(type IN('SUV','Sedan','Hatchback','Sports')))";
+  //let sql="INSERT INTO extra VALUES('EX1217','Armrest',100000,'Hatchback'),('EX1234','Alloy Wheels',100000,'SUV'),('EX5678','Sunroof',200000,'Sedan')";
+  //let sql="SELECT * FROM extra";
+  //let sql="CREATE TABLE customer (cust_id int AUTO_INCREMENT Primary Key,name varchar(20) not null,address varchar(30) not null,city varchar(20) not null,phone_no int null)"
+  //let sql="INSERT INTO customer VALUES(010208,'Hamilton','Sunderganj','Akola',9322272203),(010209,'Schumachar','Dharavi','Mumbai',9322272213),(010210,'Verstappen','Chembur','Mumbai',9322272223)";
+  //let sql="SELECT * FROM customer";
+  //let sqlNew="SELECT count(cust_id) as custCount FROM Customer";
+  //let sql="SELECT * FROM Orders";
+  //let sql="INSERT INTO Orders VALUES('O00111','2019-10-13','2019-10-15','C00002','010207','E00004','P00111',null)";
+  //let sql="SELECT * FROM Orders where order_id='O00111'";
+  let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
+  let sql="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
-
-	});*/
+		
+	});
 
 
 });
 
+var check=function(req,res,next){
 
-router.get("/placeOrder",function(req,res){
+	if(req.user){
+
+		next();
+	} else{
+
+		res.redirect('/login');
+	}
+
+}
+
+
+
+router.get("/placeOrder",check,function(req,res){
 
 	console.log("placing new order");
 
-	let sql="SELECT *FROM cars;"
+	let sql="SELECT *FROM car_details;"
 	db.query(sql,function(err,result){
 
 		if(err) throw err;
 		console.log(result,"cars");
 
-		let sql1="SELECT *FROM Extras";
+		let sql1="SELECT *FROM extra";
 		db.query(sql1,function(err,result1){
 			if(err) throw err;
 			console.log(result1,"cars_extras");
+
 
 			let sql2="SELECT emp_id FROM Employee";
 			db.query(sql2,function(err,result2){
 				if(err) throw err;
 				console.log(result2,"emp_id");
 
-				res.render("placeOrder",{car:result,extra:result1,emp_id:result2});
+				if(req.query.Order_status){
+					res.render("new_order",{car:result,extra:result1,emp_id:result2,condition:req.query.condition});
+
+				} else{
+					res.render("new_order",{car:result,extra:result1,emp_id:result2,condition:"first"});
+
+				}
+				
+
 
 			})
 
@@ -77,78 +118,102 @@ router.get("/placeOrder",function(req,res){
 
 	})
 
+	
 
-	res.render("new_order");
 
 });
 
-router.post("/createOrder",function(req,res){
+router.post("/createOrder",check,function(req,res){
 
 	console.log("creating new order",req.body);
 
 	let body=req.body;
 
-	let sql="SELECT * FROM Customer where customer_id phone_no="+body.phone2;
+	let sql="SELECT * FROM Customer where phone_no="+body.phone2;
 	db.query(sql,function(err,result){
 
 		if(err) throw err;
-		console.log(result);
+		console.log(result,"hi1");
 
 		if(result.length){
 
 			let sql1="SELECT COUNT(order_id) as count FROM orders";
 			db.query(sql1,function(err,result1){
 				if(err) throw err;
-				console.log(result1);
+				console.log(result1,"hi2");
 
-				let order_id="O0"+result1[0].count;
-
+				let order_id="O0"+(result1[0].count+1);
+				
 				let sql2="SELECT COUNT(payment_id) as count FROM payment";
 				db.query(sql2,function(err,result2){
 					if(err) throw err;
-					console.log(result2);
+					console.log(result2,"hi3");
 
-					let payment_id="P0"+result2[0].count;
+					let payment_id="P0"+(result2[0].count+1);
+					
 
-
-						let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_model+"'";
+						let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_id+"'";
 						db.query(sql4,function(err,result4){
 							if(err) throw err;
-							console.log(result4);
+							console.log(result4,"hi4");
 
 							if(result4[0].qty_available>0){
 								let qty_available=result4[0].qty_available-1
-								let sql5="UPDATE car_details SET qty_available="+qty_available+" where car_id='"+body.car_model+"'";
+								let sql5="UPDATE car_details SET qty_available="+qty_available+" where car_id='"+body.car_id+"'";
 
 								db.query(sql5,function(err,result5){
 									if(err) throw err;
-									console.log(result5);
+									console.log(result5,"hi5");
 
-									let sql6="INSERT INTO payment VALUES('"+payment_id+"','"+body.pay_method+"',"+body.cur_amt+","+result4[0].price+")";
+									let sql6="INSERT INTO payment VALUES('"+payment_id+"',"+body.cur_amt+",'"+body.pay_method+"',"+body.total_amt+")";
 
 										db.query(sql6,function(err,result5){
 											if(err) throw err;
-											console.log(result5);
+											console.log(result5,"hi6");
 
-											let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_model+"','"+result[0].customer_id+"','"+body.emp_id+"','"+payment_id+"','"+body.extra_id+"')";
-											db.query(sql3,function(err,result3){
+
+											if(body.extra_id&&body.car_id){
+												let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_id+"','"+result[0].cust_id+"','"+body.emp_id+"','"+payment_id+"','"+body.extra_id+"')";
+												db.query(sql3,function(err,result3){
 												if(err) throw err;
-												console.log(result3);
+												console.log(result3,"hii8");
 
-												res.render("new_order",{condition:true});
-
-
-											})
+															//res.render("new_order",{condition:true});
+												res.redirect("/order/placeOrder?Order_status=successful");
 
 
+												})
 
-										})
+											} else if(body.extra_id==undefined&&body.car_id){
+
+												let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_id+"','"+result[0].cust_id+"','"+body.emp_id+"','"+payment_id+"',null)";
+												db.query(sql3,function(err,result3){
+													if(err) throw err;
+													console.log(result3,"hii8");
+
+															//res.render("new_order",{condition:true});
+													res.redirect("/order/placeOrder?Order_status=successful");
+
+
+												})
+
+											} else{
+												let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"',null,'"+result[0].cust_id+"','"+body.emp_id+"','"+payment_id+"',null)";
+												db.query(sql3,function(err,result3){
+													if(err) throw err;
+													console.log(result3,"hii8");
+															//res.render("new_order",{condition:true});
+													res.redirect("/order/placeOrder?Order_status=successful");
+												})
+											}
+									})
 
 								})
 
 							} else{
 
-								res.render("new_order",{condition:false});
+								res.redirect("/order/placeOrder?Order_status=failed");
+								
 
 							}
 
@@ -162,64 +227,98 @@ router.post("/createOrder",function(req,res){
 
 			} else{
 
-				let sqlNew="SELECT count(customer_id) as count FROM Customer";
+				let sqlNew="SELECT count(cust_id) as custCount FROM Customer";
 				db.query(sqlNew,function(err,resultNew){
 
 					if(err) throw err;
-					console.log(resultNew);
+					console.log(resultNew,"hii1");
 
-					let customer_id=resultNew[0].count+1;
-					let sqlNewInfo="INSERT INTO Customer VALUES('"+customer_id+"','"+body.client_name+"','"+body.client_addr+"','"+body.city+"',"+body.phone2+")";
+					let customer_id=resultNew[0].custCount+1;
+					console.log(customer_id);
+					let sqlNewInfo="INSERT INTO Customer VALUES("+customer_id+",'"+body.client_name+"','"+body.client_addr+"','"+body.city+"',"+body.phone2+")";
 					db.query(sqlNewInfo,function(err,resultNewInfo){
 
 						if(err) throw err;
-						console.log(resultNewInfo);
+						console.log(resultNewInfo,"hii2");
 
 						let sql1="SELECT COUNT(order_id) as count FROM orders";
 						db.query(sql1,function(err,result1){
 							if(err) throw err;
-							console.log(result1);
+							console.log(result1,"hii3");
 
-							let order_id="O0"+result1[0].count;
-
+							let order_id="O0"+(result1[0].count+1);
+							console.log(order_id);
 							let sql2="SELECT COUNT(payment_id) as count FROM payment";
 							db.query(sql2,function(err,result2){
 								if(err) throw err;
-								console.log(result2);
+								console.log(result2,"hii4");
 
-								let payment_id="P0"+result2[0].count;
-
-
-									let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_model+"'";
+								let payment_id="P0"+(result2[0].count+1);
+								
+								console.log(payment_id);
+									let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_id+"'";
 									db.query(sql4,function(err,result4){
 										if(err) throw err;
-										console.log(result4);
+										console.log(result4,"hii5");
 
 										if(result4[0].qty_available>0){
 											let qty_available=result4[0].qty_available-1
-											let sql5="UPDATE car_details SET qty_available="+qty_available+" where car_id='"+body.car_model+"'";
+											let sql5="UPDATE car_details SET qty_available="+qty_available+" where car_id='"+body.car_id+"'";
 
 											db.query(sql5,function(err,result5){
 												if(err) throw err;
-												console.log(result5);
+												console.log(result5,"hii6");
 
-												let sql6="INSERT INTO payment VALUES('"+payment_id+"','"+body.pay_method+"',"+body.cur_amt+","+result4[0].price+")";
+												let sql6="INSERT INTO payment VALUES('"+payment_id+"',"+body.cur_amt+",'"+body.pay_method+"',"+body.total_amt+")";
 
 													db.query(sql6,function(err,result5){
 														if(err) throw err;
-														console.log(result5);
+														console.log(result5,"hii7");
 
-														let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_model+"','"+result[0].customer_id+"','"+body.emp_id+"','"+payment_id+"','"+body.extra_id+"')";
+														if(body.extra_id&&body.car_id){
+															let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_id+"','"+customer_id+"','"+body.emp_id+"','"+payment_id+"','"+body.extra_id+"')";
 														db.query(sql3,function(err,result3){
 															if(err) throw err;
-															console.log(result3);
+															console.log(result3,"hii8");
 
-															res.render("new_order",{condition:true});
+															//res.render("new_order",{condition:true});
+															res.redirect("/order/placeOrder");
+
+
+														})
+
+														} else if(body.extra_id==undefined&&body.car_id){
+
+															let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"','"+body.car_id+"','"+customer_id+"','"+body.emp_id+"','"+payment_id+"',null)";
+														db.query(sql3,function(err,result3){
+															if(err) throw err;
+															console.log(result3,"hii8");
+
+															//res.render("new_order",{condition:true});
+															res.redirect("/order/placeOrder");
+
+
+														})
+
+														} else{
+															let sql3="INSERT INTO Orders VALUES('"+order_id+"','"+body.pay_date+"','"+body.dely_date+"',null,'"+customer_id+"','"+body.emp_id+"','"+payment_id+"',null)";
+														db.query(sql3,function(err,result3){
+															if(err) throw err;
+															console.log(result3,"hii8");
+
+															//res.render("new_order",{condition:true});
+															res.redirect("/order/placeOrder?Order_status=successful");
 
 
 														})
 
 
+
+														}
+
+														
+
+												
 
 													})
 
@@ -227,7 +326,9 @@ router.post("/createOrder",function(req,res){
 
 										} else{
 
-											res.render("new_order",{condition:false});
+											//res.render("new_order",{condition:false});
+											res.redirect("/order/placeOrder?Order_status=failed");
+
 
 										}
 
@@ -249,38 +350,53 @@ router.post("/createOrder",function(req,res){
 
 		})
 
-	res.render("new_order");
 
 })
 
-router.get("/prevOrder",function(req,res){
+router.get("/prevOrder",check,function(req,res){
 
 	console.log("updating new payment");
-	let sql="SELECT Orders.order_id,payment.total_cost,payment.paid_amt FROM Orders,payment where Orders.payment_id=payment.payment_id AND Orders.payment_id IN(SELECT payment.payment_id FROM payment where payment.total_cost>payment.paid_amt)";
+	let sql="SELECT Orders.order_id,payment.total_cost,payment.paid_amount FROM Orders,payment where Orders.payment_id=payment.payment_id AND Orders.payment_id IN(SELECT payment.payment_id FROM payment where payment.total_cost>payment.paid_amount)";
 	db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
 
-		res.render("prev_order",{orderObject:result});
+		if(req.query.Order_status){
 
+			res.render("prev_order",{orderObject:result,condition:req.query.Order_status});
+
+
+		} else{
+			console.log("yes here");
+			res.render("prev_order",{orderObject:result,condition:"first"});
+
+		}
+		
 	})
 
 
 })
 
-router.post("/prevOrder",function(req,res){
+router.post("/prevOrder",check,function(req,res){
 
 	console.log("updating new payment",req.body);
 
 	let body=req.body;
-	paid_amt=body.total_cost-body.balance_due;
-	let sql="UPDATE payment SET paid_amt="+paid_amt+"where payment_id = (SELECT payment_id FROM Orders where order_id='"+body.order_id+"')";
+	paid_amount=Number(body.total_cost) - Number(body.paym_due);
+	console.log(paid_amount);
+	let sql="UPDATE payment SET paid_amount = "+paid_amount+" where payment_id IN (SELECT payment_id FROM Orders where order_id='"+body.order_id+"')";
 	db.query(sql,function(err,result){
 
-		if(err) throw err;
-		console.log(result);
+		if(err){
+			res.redirect("/order/prevOrder?Order_status=failed");
+		} else{
 
-		res.redirect("/orders/prevOrder");
+			console.log(result);
+
+			res.redirect("/order/prevOrder?Order_status=successful");
+
+		}
+		
 
 	})
 

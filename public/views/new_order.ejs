@@ -9,140 +9,334 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
+<style >
+    #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:35%;
+  font-size: 18px;
+}
+#yesBtn{
+  position: relative;
+  top:24%;
+  left:30%;
+}
+#cancelBtn{
+  position: relative;
+  
+  left:50%;
+}
+#textMsg{
+
+}
+
+  </style>
+
+
 <body>
 
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">CarShowroom</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li ><a href="/employees">Home</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">View Order</a></li>
-            <li><a href="#">Place Order</a></li>
-            <li><a href="#">Previous Order</a></li>
-          </ul>
-        </li>
-        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="#">Home</a></li>
+      <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="/product/addproduct">New Product</a></li>
-          <li><a href="/product">View Product</a></li>
-          <li><a href="/product/extras/addextras">New Extra</a></li>
-          <li><a href="/product/extras">View Extra</a></li>
-
+          <li><a href="#">View Order</a></li>
+          <li><a href="/order/placeOrder">Place Order</a></li>
+          <li><a href="/order/prevOrder">Previous Order</a></li>
         </ul>
       </li>
-
-
-          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/employees/addEmployee">New Employee</a></li>
-            <li><a href="/employees">View Employee</a></li>
-            <li><a href="/logout">LogOut</a></li>
-
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
+      <li><a href="#">Products</a></li>
+      <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/employees/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+          <li><a href="/logout">LogOut</a></li>
+      
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 
 <div class="col-lg-8" style="width:100%;background-image:url('../images/neword_cover.jpeg');background-repeat:no-repeat;">
-	<form action="/order/createOrder" method="POST">
+    <form action="/order/createOrder" method="POST">
 
     <div class="fld">
-    	<fieldset class="fields" id="prod_details">
-        	<h4><strong>PRODUCT DETAILS</strong></h4><hr>
+        <fieldset class="fields" id="prod_details">
+            <h4><strong>PRODUCT DETAILS</strong></h4><hr>
 
-        	<table class="inp">
-                <tr><td colspan="2">Select type of product :</tr></td>
-            	<tr>
-                    <td><input type="checkbox" id="carr" name="prod_type" value="car" >
-            	    <label for="carr">&nbsp;Car</label></td>
-                    <td><input type="checkbox" id="extraa" name="prod_type" value="extras">
-            	    <label for="extraa">&nbsp;Car Extras</label><br></td>
-                </tr>
-            	<tr>
+            <table class="inp">
+             
+                <tr>
                     <td class="c1">Select the car -</td>
-                    <td class="c2"><input list="Cars" name="car_model" placeholder="Search.." required>
-            	    <datalist id="Cars"></datalist></td>
+                    <td class="c2"><input list="Cars" name="car_id" id="car_id" placeholder="Search.." required>
+                    <datalist id="Cars">
+                        <%car.forEach(function(item){%>
+                     <option value="<%=item.car_id%>">
+                     <%})%>  
+                    </datalist></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Select extras -</td>
-                    <td class="c2"><input list="Extras" name="extra" placeholder="Search..">
-            	    <datalist id="Extras"></datalist></td>
+                    <td class="c2"><input list="Extras" name="extra_id"  id="extra_id" placeholder="Search.." required>
+                    <datalist id="Extras">
+                         <%extra.forEach(function(item){%>
+                     <option value="<%=item.extra_id%>">
+                     <%})%> 
+                    </datalist></td>
                 </tr>
-        	</table>
-    	</fieldset>
-    	<fieldset class="fields" id="order_specs">
-        	<h4>ORDER SPECIFICATIONS</h4><hr>
+            </table>
+        </fieldset>
+        <fieldset class="fields" id="order_specs">
+            <h4>ORDER SPECIFICATIONS</h4><hr>
 
-        	<table class="inp">
-            	<tr>
+            <table class="inp">
+                <tr>
                     <td class="c1">Employee ID -</td>
-                    <td class="c2"><input list="Employees" name="emp_id" placeholder="Search.." required>
-                	<datalist id="Employees"></datalist></td>
+                    <td class="c2"><input list="Employees" name="emp_id" placeholder="Search.." id="emp_id" required>
+                    <datalist id="Employees">
+                     <%emp_id.forEach(function(item){%>
+                     <option value="<%=item.emp_id%>">
+                     <%})%>   
+                    </datalist></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Client Name -</td>
                     <td class="c2"><input type="text" name="client_name"></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Address -</td>
                     <td class="c2">
-                	<textarea name="client_addr" rows="3" columns="12" style="width:200px;" required></textarea></td>
+                    <textarea name="client_addr" rows="3" columns="12" style="width:200px;" required></textarea></td>
                 </tr>
-            	<tr>
+                <tr>
+                    <td class="c1">City -</td>
+                    <td class="c2">
+                    <input type="text" name="city" rows="3" columns="12" style="width:200px;" required></td>
+                </tr>
+                <tr>
                     <td class="c1">Phone No -</td><td class="c2">
-                	<input type="text" name="phone2" size="13"> &nbsp;
-                    <input type="text" name="phone1" size="13" required></td>
+                    <input type="text" name="phone2" size="13" required> &nbsp;
+                    </td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Email ID -</td>
-                    <td class="c2"><input type="text" name="email" required></td>
+                    <td class="c2"><input type="email" name="email" required></td>
                 </tr>
-        	</table>
-    	</fieldset>
-    	<fieldset class="fields" id="paym_details">
-        	<h4 class="Legends">PAYMENT</h4><hr>
-
-        	<table class="inp">
-                <tr><td colspan="2">Payment Method</td></tr>
-            	<tr>
-                    <td><input type="radio" id="comp" name="pay_method" value="complete">
-                	<label for="comp">&nbsp;Complete</label></td>
-                	<td><input type="radio" id="inst" name="pay_method" value="installment">
-                	<label for="inst">&nbsp;Installments</label></td>
-                </tr>
-            	<tr>
+            </table>
+        </fieldset>
+        <fieldset class="fields" id="paym_details">
+            <h4 class="Legends">PAYMENT</h4><hr>
+                <div class="row"><div class="col-sm-4" style="padding-bottom: 10px">Payment Method</div></div>
+                <div class="row" >
+                    <div class="col-sm-3"><input type="radio" id="DD" name="pay_method" value="DD">
+                    <label for="DD">DD</label></div>
+                    <div class="col-sm-3"><input type="radio" id="Cash" name="pay_method" value="Cash">
+                    <label for="Cash">Cash</label></div>
+                    <div class="col-sm-3"><input type="radio" id="Cheque" name="pay_method" value="Cheque">
+                    <label for="Cheque">Cheque</label></div>
+                    <div class="col-sm-3"><input type="radio" id="EMI" name="pay_method" value="EMI">
+                    <label for="EMI">EMI</label></div>
+                </div>
+            <table class="inp">
+                
+                <tr>
                     <td class="c1">Current Payment -</td>
-                    <td class="c2"><input type="text" name="cur_amt" required></td>
+                    <td class="c2"><input type="number" name="cur_amt" id="cur_amt" required></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Total amount -</td>
-                	<td class="c2"><input type="text" name="total_amt" required></td>
+                    <td class="c2"><input type="text" name="total_amt" id="total_amt"  required></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Payment Due -</td>
-                    <td class="c2"><input type="text" name="pay_due" value="???" readonly></td>
+                    <td class="c2"><input type="number" name="pay_due" value="???" id="pay_due" readonly></td>
                 </tr>
-            	<tr>
+                <tr>
                     <td class="c1">Payment Date -</td>
-                    <td class="c2"><input type="date" id="e" name="pay_date">
-                	<script>
+                    <td class="c2"><input type="date" id="e" name="pay_date" required>
+                    <script>
                         document.getElementById('e').value =
                         new Date().toISOString().substring(0, 10);
                     </script></td>
                 </tr>
-        	</table>
+                <tr>
+                    <td class="c1">Delivery Date -</td>
+                    <td class="c2"><input type="date" id="f" name="dely_date" required>
+                    <script>
+                        //document.getElementById('f').min =
+                        //new Date().toISOString().substring(0, 10);
+                    </script></td>
+                </tr>
+            </table>
 
-        	<center><input type="submit" value="SUBMIT" class="subm"></center>
-    	</fieldset>
+            <center><input type="submit" value="SUBMIT" class="subm"></center>
+        </fieldset>
     </div>
     </form>
 </div>
+<div id="overlay">
+  
+
+  
+</div>
 </body>
+<script >
+
+    let emp_id=<%-JSON.stringify(emp_id)%>
+    console.log(emp_id);
+
+     let car=<%-JSON.stringify(car)%>
+    console.log(car);
+
+    let extra=<%-JSON.stringify(extra)%>;
+    console.log(extra);
+     
+ 
+    let emp_id_input=document.getElementById("emp_id");
+    console.log(emp_id_input);
+
+    emp_id_input.onblur=function(){
+
+        console.log("input blurred");
+        console.log(emp_id_input.value);
+
+
+
+
+    }
+
+
+    let car_id_input=document.getElementById("car_id");
+    let extra_id_input=document.getElementById("extra_id");
+    let cur_amt=document.getElementById("cur_amt");
+    console.log(car_id_input,extra_id_input);
+    
+    car_id_input.onblur=function(){
+
+        fillTotal();
+
+    }
+
+    extra_id_input.onblur=function(){
+
+        fillTotal();
+
+    }
+
+    cur_amt.onblur=function(){
+
+        console.log("adding current amount");
+        let total=document.getElementById("total_amt").value;
+        let cur_amt_value=document.getElementById("cur_amt").value;
+        console.log(total,cur_amt_value);
+        document.getElementById("pay_due").value= total - cur_amt_value;
+
+    }
+
+
+
+    var fillTotal=function(){
+
+        let total=0;
+        console.log("car_id blurred",car_id_input.value);
+
+        let car_cost=car.filter(function(item){
+
+            if(item.car_id==car_id_input.value){
+
+                total+=item.price;
+                return item;
+            }
+
+
+        })
+
+        let car_extra_cost=extra.filter(function(item){
+
+            if(item.extra_id==extra_id_input.value){
+
+                total+=item.price;
+                return item;
+            }
+
+
+        })
+
+
+        document.getElementById("total_amt").value=total;
+
+    }
+
+let condition=<%-JSON.stringify(condition)%>;
+  console.log(condition);
+
+  function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+var overlayShow=function(value){
+    let overlay=document.getElementById('overlay');
+      overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+             "<div id='warning' >"+
+                "<p id='textMsg'>"+value+"</p>"+
+            "</div>"+
+            "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+            "</div>"+
+                
+          "</div>";
+
+  }
+
+  if(condition=="successful"){
+    on();
+
+    overlayShow("Order is Created")
+ 
+  } else if(condition=="failed"){
+
+    on();
+    overlayShow("Failed to Create");
+
+  }
+
+
+</script>
 </html>

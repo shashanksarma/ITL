@@ -5,86 +5,239 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="neworder.css">
+  <link rel="stylesheet" href="../css/neworder.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
+<style >
+    #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:35%;
+  font-size: 18px;
+}
+#yesBtn{
+  position: relative;
+  top:24%;
+  left:30%;
+}
+#cancelBtn{
+  position: relative;
+  
+  left:50%;
+}
+#textMsg{
+
+}
+
+  </style>
+
+
+
 <body>
 
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">CarShowroom</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li ><a href="/employees">Home</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">View Order</a></li>
-            <li><a href="#">Place Order</a></li>
-            <li><a href="#">Previous Order</a></li>
-          </ul>
-        </li>
-        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="#">Home</a></li>
+      <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="/product/addproduct">New Product</a></li>
-          <li><a href="/product">View Product</a></li>
-          <li><a href="/product/extras/addextras">New Extra</a></li>
-          <li><a href="/product/extras">View Extra</a></li>
-
+          <li><a href="#">View Order</a></li>
+          <li><a href="/order/placeOrder">Place Order</a></li>
+          <li><a href="/order/prevOrder">Previous Order</a></li>
         </ul>
       </li>
+      <li><a href="#">Products</a></li>
+      <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/employees/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+          <li><a href="/logout">LogOut</a></li>
+      
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-
-          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/employees/addEmployee">New Employee</a></li>
-            <li><a href="/employees">View Employee</a></li>
-            <li><a href="/logout">LogOut</a></li>
-
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
-<div class="col-lg-8" style="width:100%;background-image:url('prevord_cover.jpg');background-repeat:no-repeat;">
-	<form action="" name="MAIN" method="post">
+<div class="col-lg-8" style="width:100%;background-image:url('../images/prevord_cover.jpg');background-repeat:no-repeat;">
+  <form action="" name="MAIN" method="post">
     <div class="fld">
-    	<fieldset class="fields" id="prod_details">
-        	<h4><strong>PAYMENT</strong></h4><hr>
+      <fieldset class="fields" id="prod_details">
+          <h4><strong>PAYMENT</strong></h4><hr>
 
-        	<table class="inp">
-            	<tr>
+          <table class="inp">
+              <tr>
                     <td class="c1">Order ID -</td>
-                    <td class="c2"><input type="text" name="order_id"></td>
+                    <td class="c2"><input type="text" list="Employees" name="order_id" id="order_id">
+                    <datalist id="Employees">
+                     <%orderObject.forEach(function(item){%>
+                     <option value="<%=item.order_id%>">
+                     <%})%>   
+                    </datalist></td>
+
                 </tr>
-            	<tr>
+              <tr>
                     <td class="c1">Amount left -</td>
-                	<td class="c2">???</td>
+                  <td class="c2"><p id="amount_left">???</p></td>
                 </tr>
-            	<tr>
+              <tr>
                     <td class="c1">Current Payment -</td>
-                    <td class="c2"><input type="text" name="cur_paym"></td>
+                    <td class="c2"><input type="number" name="cur_paym" id="cur_paym"></td>
                 </tr>
-            	<tr>
+                <tr>
+                    <td class="c1">Total Payment -</td>
+                    <td class="c2"><input type="number" name="total_cost" id="total_cost"></td>
+                </tr>
+              <tr>
                     <td class="c1">Payment Due -</td>
-                    <td class="c2"><input type="text" name="paym_due" value="???" readonly></td>
+                    <td class="c2"><input type="number" name="paym_due" id="paym_due"></td>
                 </tr>
-            	<tr>
+              <tr>
                     <td class="c1">Payment Date -</td>
                     <td class="c2"><input type="date" id="e" name="paym_date">
-                	<script>
+                  <script>
                         document.getElementById('e').value =
                         new Date().toISOString().substring(0, 10);
-                	</script></td>
+                  </script></td>
                 </tr>
-        	</table>
-
-        	<center><input type="submit" value="SUBMIT" class="subm"></center>
-    	</fieldset>
+          </table>
+            
+          <center><input type="submit" value="SUBMIT" class="subm"></center>
+      </fieldset>
     </div>
-	</form>
+  </form>
+</div>
+<div id="overlay">
+  
+
+  
 </div>
 </body>
+<script>
+  
+  let orderObject=<%-JSON.stringify(orderObject)%>;
+  <%-JSON.stringify(condition)%>
+  console.log(orderObject);
+
+  let order_id_input=document.getElementById("order_id");
+  console.log(order_id_input);
+
+  order_id_input.onblur=function(){
+
+    console.log("selecting order ");
+
+
+    let total_cost=orderObject.filter(function(item){
+
+        let total_cost_input=document.getElementById("total_cost");
+        if(item.order_id==order_id_input.value){
+
+          total_cost_input.value=item.total_cost;
+          document.getElementById("amount_left").innerHTML=(item.total_cost-item.paid_amount);
+          return item;
+
+        }
+
+    })
+
+  }
+
+  let cur_paym_input=document.getElementById("cur_paym");
+  console.log(cur_paym_input);
+
+  cur_paym_input.onblur=function(){
+
+    console.log("choosing amount to pay");
+
+    let cur_cost=orderObject.filter(function(item){
+
+        let paym_due_input=document.getElementById("paym_due");
+        if(item.order_id==order_id_input.value){
+
+          //total_cost_input.value=item.total_cost;
+          paym_due_input.value=item.total_cost;
+          paym_due_input.value=paym_due_input.value-(item.paid_amount);
+          paym_due_input.value=paym_due_input.value - cur_paym_input.value;
+
+          return item;
+
+        }
+
+    })
+  }
+
+  let condition=<%-JSON.stringify(condition)%>;
+  console.log(condition);
+
+  function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+var overlayShow=function(value){
+    let overlay=document.getElementById('overlay');
+      overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+             "<div id='warning' >"+
+                "<p id='textMsg'>"+value+"</p>"+
+            "</div>"+
+            "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+            "</div>"+
+                
+          "</div>";
+
+  }
+
+  if(condition=="successful"){
+    on();
+
+    overlayShow("Order is Updated")
+ 
+  } else if(condition=="failed"){
+
+    on();
+    overlayShow("Failed to Update");
+
+  }
+  
+
+    
+
+
+
+</script>
 </html>

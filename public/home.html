@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Place New Order</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="neworder.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="../node_modules/chart.js/dist/chart.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Employees</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!--
+<div class="col-lg-8" style="width:100%;background-image:url('neword_cover.jpeg');background-repeat:no-repeat;">
+    <h1 style="margin-top:50px;">PAGAL</h1>
+<div class="home">
+hi
+</div>
+</div>-->
+<div class="home1">
+    <h1 class="banner1">FIND CARS<br>SPECIAL FOR YOU</h1>
+    <h2 class="ban-sub">With hundreds of products,<br>we have just the right one for you</h2>
+    <button class="btn1" onclick="document.location=''"><strong>EXPLORE &nbsp;PRODUCTS</strong></button>
+</div>
+<div class="ad1">
+    <h1 class="ad1h">- MEET THE SEDAN FAMILY -</h1><br>
+    <table>
+        <tr>
+            <td><img src="images/LS.png" class="sedan"></td>
+            <td><img src="images/ES.png" class="sedan"></td>
+            <td><img src="images/ES-Hybrid.png" class="sedan"></td>
+            <td><img src="images/GS.png" class="sedan"></td>
+            <td><button class="arrow1" onclick="document.location=''">></button></td>
+        </tr>
+        <tr>
+            <td><p class="carlabel">LS</p></td>
+            <td><p class="carlabel">ES</p></td>
+            <td><p class="carlabel">ES Hybrid</p></td>
+            <td><p class="carlabel">GS</p></td>
+        </tr>
+    </table>
+</div>
+<div class="ad2">
+    <table>
+        <tr>
+            <td style="width:600px;height: 400px;">
+                <div style="width:500px;"><h1 class="ad2h">THE BRAND NEW<br>LS HYBRID</h1>
+                <p class="ad2p">Bold, tough and ready to take on anything.This XV has a sporty look,
+                sleek accessories and leather uphoistery inspired by European high-performance grand tourers.</p>
+                <div style="width:400px;">
+                    <center>
+                        <button class="btn1" style="padding:10px;font-size:15px;" onclick="document.location=''">
+                            <strong>View this car</strong>
+                    </button></center>
+                </div>
+            </td>
+            <td style="width:600px;"><img src="images/LS-Hybrid.png" style="float:right;size:120%;"></td>
+        </tr>
+    </table>
+</div>
+<!--<div class="contain">-->
+<br><br><h1 class="ad1h">Our Statistics</h1><br>
+    <div class="chart"><canvas id="chart1"></canvas><br></div>
+    <div class="chart"><canvas id="chart2"></canvas><br></div>
+<!--</div>-->
+<div class="abt">
+    <h1 class="abt_hdr">ABOUT</h1><br><br>
+    <p class="abt_para">We believe that our customers are as special as our cars, so we take car shopping to a whole new level.
+        Stop by to see how we have transformed the Lexus experience.
+        From the purchase of your new Lexus to the time you need it serviced or repaired,
+        we offer the kind of customer service all great dealerships aspire to.
+        Come experience the Lexus of Las Vegas difference.</p>
+</div>
+<script>
+    var chart1 = document.getElementById('chart1').getContext('2d');
+    var chart2 = document.getElementById('chart2').getContext('2d');
+    var carChart = new Chart(chart1, {
+        type: 'bar',
+        data: {
+            labels: ['458 Italia','Spyder','Overdrive','Cruiser','ES Hybrid'],
+            datasets: [{
+                label: 'Cars Sold',
+                data:[
+                    56, 47, 45, 43, 39],
+                backgroundColor:[
+                    'green','lightblue','tomato','yellow','purple'
+                ]
+            }]
+        },
+        options: {}
+    });
+    var saleChart = new Chart(chart2, {
+        type: 'bar',
+        data: {
+            labels: ['September','August','July','June','May'],
+            datasets: [{
+                label: 'Recent sales',
+                data:[
+                    107, 120, 117, 123, 107],
+                backgroundColor:[
+                    'green','lightblue','tomato','yellow'
+                ]
+            }]
+        },
+        options: {}
+    });
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Employees</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -47,7 +47,7 @@
 }
 #cancelBtn{
   position: relative;
-  
+
   left:50%;
 }
 
@@ -59,34 +59,43 @@
 <body>
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">CarShowroom</a>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CarShowroom</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li ><a href="/employees">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">View Order</a></li>
+            <li><a href="#">Place Order</a></li>
+            <li><a href="#">Previous Order</a></li>
+          </ul>
+        </li>
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/product/addproduct">New Product</a></li>
+          <li><a href="/product">View Product</a></li>
+          <li><a href="/product/extras/addextras">New Extra</a></li>
+          <li><a href="/product/extras">View Extra</a></li>
+
+        </ul>
+      </li>
+
+
+          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/employees/addEmployee">New Employee</a></li>
+            <li><a href="/employees">View Employee</a></li>
+            <li><a href="/logout">LogOut</a></li>
+
+          </ul>
+        </li>
+      </ul>
     </div>
-    <ul class="nav navbar-nav">
-      <li ><a href="/employees">Home</a></li>
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">View Order</a></li>
-          <li><a href="#">Place Order</a></li>
-          <li><a href="#">Previous Order</a></li>
-        </ul>
-      </li>
-      <li ><a href="#">Products</a></li>
-      
-        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="/employees/addEmployee">New Employee</a></li>
-          <li><a href="/employees">View Employee</a></li>
-          <li><a href="/logout">LogOut</a></li>
-      
-        </ul>
-      </li>
-    </ul>
-  </div>
-</nav>
-  
+  </nav>
+
 <div class="container">
   <div class="row">
     <div class="col-lg-8" style="padding-top:5% ">
@@ -101,7 +110,7 @@
               <p style="font-size: 100px;padding-left:35%;padding-top: 5%"><%=item.name[0]%></p>
             </div>
             <div class="col-lg-8">
-              
+
               <h4 style="text-align: center;border-bottom: 1px solid black">INFO</h4>
               <div class="row" style="padding-left: 10px;">
               <div class="col-lg-6">
@@ -114,7 +123,7 @@
               <button><a href="/employees/viewEmployee?emp_id=<%=item.emp_id%>">view more</a></button><br>
               <div style="padding: 5px"></div>
               <button onclick="delPOP('<%=item.emp_id%>');" id='<%=item.emp_id%>'>del</button>
-              
+
               <%if(item.per==undefined&&item.temp==undefined){%>
               <div style="padding: 5px"></div>
               <form action="/employees/giveAccess?emp_id=<%=item.emp_id%>" method="POST">
@@ -130,11 +139,11 @@
           </div>
           <div class="row" style="padding: 25px"></div>
           <%})%>
-        
-        
-        
-          
-      
+
+
+
+
+
       </div>
 </div>
   <div class="col-lg-4" style="border-left: 5px solid black;position: fixed;right:0%;top:50px;height: 100%;overflow-y: auto">
@@ -167,26 +176,26 @@
       <p>Search by top perfomance</p>
       <%topYear.forEach(function(item){%>
       <input type="checkbox" name="tocheck" class="yearbox" value="<%=item.YEAR%>"><label style="padding-left: 20px"><%=item.YEAR%></label><br>
- 
+
     <%})%>
     </div>
     <button onclick="checkit();">check</button>
   </div>
-    
+
   </div>
-  
+
 </div>
 
 <div id="overlay">
-  
 
-  
+
+
 </div>
 
 </div>
 <script src="./js/check.js" charset="utf-8"></script>
 <script >
-  
+
 
 let name=<%-JSON.stringify(mainObject)%>;
 console.log(name);
@@ -274,7 +283,7 @@ var checkit=function(){
                 "<p style='font-size: 100px;padding-left:35%;padding-top: 5%'>"+item.name[0]+"</p>"+
               "</div>"+
               "<div class='col-lg-8'>"+
-                
+
                 "<h4 style='text-align: center;border-bottom: 1px solid black'>INFO</h4>"+
                 "<div class='row' style='padding-left: 10px;'>"+
                 "<div class='col-lg-6'>"+
@@ -295,7 +304,7 @@ var checkit=function(){
                     "</div>"+
                   "</div>"+
                   "<div class='row' style='padding: 25px'></div>";
-                
+
 
                         /*infoDiv.innerHTML+="<div style='padding: 5px'></div>"+
                     "<form action='/employees/giveAccess?emp_id="+item.emp_id+"' method='POST'>"+
@@ -327,7 +336,7 @@ var checkit=function(){
                 "<p style='font-size: 100px;padding-left:35%;padding-top: 5%'>"+item.name[0]+"</p>"+
               "</div>"+
               "<div class='col-lg-8'>"+
-                
+
                 "<h4 style='text-align: center;border-bottom: 1px solid black'>INFO</h4>"+
                 "<div class='row' style='padding-left: 10px;'>"+
                 "<div class='col-lg-6'>"+
@@ -351,11 +360,11 @@ var checkit=function(){
 
 
                 }
-             
+
 
 
     });
-  
+
 
   })
 
@@ -370,12 +379,12 @@ var delEmp=function(item){
   let delObject=document.getElementById(item.id);
   console.log(delObject);
   //delObject.parentNode.parentNode.remove();
-  
+
 
   //console.log(delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling);
 
 
-            
+
 
 
 
@@ -392,11 +401,11 @@ var delEmp=function(item){
           console.log(result);
 
           console.log(delObject,item.id);
-           
+
           if(result.done){
 
               //delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling.remove();
-              delObject.parentNode.parentNode.parentNode.parentNode.remove(); 
+              delObject.parentNode.parentNode.parentNode.parentNode.remove();
 
               on();
               let overlay=document.getElementById('overlay');
@@ -407,7 +416,7 @@ var delEmp=function(item){
                 "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
                   "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
                 "</div>"+
-                
+
               "</div>"
 
 
@@ -427,7 +436,7 @@ var delEmp=function(item){
                 "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
                   "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white;'>close</button>"+
                 "</div>"+
-                
+
               "</div>"
               let message=document.getElementById('textMsg');
               message.innerHTML="There was some error while deleting the Employee.<br>Sorry Please try again."
@@ -468,9 +477,9 @@ function delPOP(item){
     "</div>"+
    " <div id='cancelBtn'>"+
       "<button onclick='off();' class='btn btn-default btn-lg' >CANCEL</button>"+
-      
+
     "</div>"+
-    
+
   "</div>";
 
 }

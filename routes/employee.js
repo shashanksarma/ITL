@@ -13,13 +13,11 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 
-
-
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
-  database : "CarShowroom"
+  password: "shashank@123",
+  database : "miniproject"
 
 });
 
@@ -27,7 +25,7 @@ db.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
   //let sql="CREATE TABLE Employee(emp_id varchar(6) Primary Key Check(emp_id like 'E%'),name varchar(30) not null,address varchar(30) not null,city varchar(30) not null,state varchar(20),dob DATE not null,joining_date DATE not null,salary int not null check(salary>0),phone_no int not null)";
-  //let sql="CREATE TABLE orders(order_id varchar(6) Primary Key check(order_id like 'O%'),date_order DATE not  null,dely_date DATE check(dely_date>=date_order),car_id varchar(6),customer_id varchar(6),emp_id varchar(6),payment_id varchar(6) not null,extra_id varchar(6),Foreign Key (emp_id) References Employee(emp_id))";
+  //let sql="CREATE TABLE orders(order_id varchar(6) Primary Key check(order_id like 'O%'),date_order DATE not  null,dely_date DATE check(dely_date>=date_order),car_id varchar(6),cust_id varchar(6),emp_id varchar(6),payment_id varchar(6) not null,extra_id varchar(6),Foreign Key (emp_id) References Employee(emp_id))";
   //let sql="INSERT INTO Employee VALUES('E00002','Bhushan','Dahisar','Mumbai','Maharashtra','2000-03-16','2017-03-16',150000,9324233439),('E00003','Vivek','Borivali','Mumbai','Maharashtra','2000-03-19','2019-03-16',300000,9324238438),('E00004','Vatsa','Mulund','Mumbai','Maharashtra','1970-09-11','2016-03-16',500000,9524233438),('E00005','Rohit Sharma','Borivali','Mumbai','Maharashtra','1988-04-30','2016-03-16',800000,8324233438),('E00006','Virat Kohli','Delhi','Delhi','Delhi','1989-11-05','2016-03-16',900000,9324733438),('E00008','KL Rahul','Malad','Mumbai','Maharashtra','1994-03-16','2016-03-16',700000,9624233438),('E00009','MS Dhoni','Malad','Ranchi','Bihar','1982-03-16','2000-03-16',900000,9924233438),('E00010','Jasprit Bumrah','Malad','Mumbai','Maharashtra','1995-03-16','2010-07-09',800000,9124233438)";
  //let sql="INSERT INTO Orders VALUES('O00002','2020-04-16','2020-06-12','C00002','010207','E00001','P00002','EX0002'),('O00003','2020-05-16','2020-06-19','C00003','010208','E00001','P00003','EX0003'),('O00004','2020-05-17','2020-06-12','C00004','010208','E00001','P00004','EX0005'),('O00005','2020-04-16','2020-06-12','C00002','010207','E00007','P00007','EX0004'),('O00006','2020-04-16','2020-06-12','C00004','010209','E00007','P00008','EX0004'),('O00007','2020-05-16','2020-07-12','C00006','010210','E00007','P00009','EX0014'),('O00008','2020-05-16','2020-07-12','C00006','010210','E00004','P00010','EX0014'),('O00009','2020-05-16','2020-07-12','C00008','010211','E00004','P00011','EX0013'),('O00010','2020-06-16','2020-08-12','C00009','010212','E00004','P00012','EX0013'),('O00011','2020-06-16','2020-08-12','C00010','010211','E00003','P00014','EX0015'),('O00012','2020-06-16','2020-08-12','C00011','010211','E00003','P00015','EX0016'),('O00013','2020-07-16','2020-08-16','C00012','010215','E00003','P00016','EX0015')";
   //let sql="SELECT *FROM Orders";
@@ -36,19 +34,21 @@ db.connect(function(err) {
   //let sql="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
   //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
-  
+
   let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
-		
+
 	});
 
 
 });
 
-
-
+//
+// router.post("/check",function(req,res){
+//   console.log(req.body);
+// })
 
 
 router.get("/",function(req,res){
@@ -73,7 +73,7 @@ router.get("/",function(req,res){
 				res.render('Employee',{mainObject:result,topYear:result1,joinYear:result2});
 
 			});
-			
+
 		});
 	})
 	console.log("hi",check);
@@ -81,11 +81,11 @@ router.get("/",function(req,res){
 	} else{
 		res.redirect('/login');
 	}
-	
-		
+
+
 	//res.sendFile(path.join(__dirname,"./public","/Employee.html"));
-	
-	
+
+
 });
 
 router.post("/filterEmployee",function(req,res){
@@ -113,7 +113,7 @@ router.post("/filterEmployee",function(req,res){
 			}
 		}
 		sql1+=") "
-		
+
 
 
 
@@ -138,12 +138,12 @@ router.post("/filterEmployee",function(req,res){
 		} else{
 			sql1+="OR (";
 		}
-		
+
 		sql1+="Employee.emp_id ='"+reqBody.emp_id+"') ";
-		
+
 	}
 
-	
+
 
 	if(reqBody.state&&reqBody.state.length>0){
 		sql+="OR (";
@@ -177,7 +177,7 @@ router.post("/filterEmployee",function(req,res){
 			sql1+=" OR("
 			secondFilter=true;
 		}
-		
+
 
 		for(var i=0;i<reqBody.dateJoin.length;i++){
 			if(i==0){
@@ -189,7 +189,7 @@ router.post("/filterEmployee",function(req,res){
 			}
 		}
 		sql1+=") ";
-	}	
+	}
 
 	if(reqBody.minSal){
 		if(!entered){
@@ -199,11 +199,11 @@ router.post("/filterEmployee",function(req,res){
 		} else if(!secondFilter){
 			sql1+="OR ("
 			secondFilter=true;
-			
+
 		} else{
 			sql1+="AND ";
 		}
-		
+
 		sql1+="(Employee.salary>="+reqBody.minSal+") ";
 	}
 
@@ -215,11 +215,11 @@ router.post("/filterEmployee",function(req,res){
 		} else if(!secondFilter){
 			sql1+="OR ("
 			secondFilter=true;
-			
+
 		} else{
 			sql1+="AND ";
 		}
-		
+
 		sql1+="(Employee.salary<="+reqBody.maxSal+") ";
 	}
 
@@ -235,11 +235,11 @@ router.post("/filterEmployee",function(req,res){
 		res.json({checkObject:result});
 
 	});
-		
+
 	}
 	//sql+=" GROUP BY Orders.emp_id ";
 	//let sql="SELECT * FROM Employee where emp_id='E00001'";
-	
+
 });
 
 
@@ -257,7 +257,7 @@ router.post("/delEmployee",function(req,res){
 			console.log(result);
 		res.json({result:result,done:true,item:req.body.item});
 		}
-		
+
 	})
 });
 
@@ -274,9 +274,9 @@ router.get("/addEmployee",function(req,res){
 	} else{
 		res.redirect("/login");
 	}
-	
 
-	
+
+
 });
 
 router.post("/addEmployee",function(req,res){
@@ -303,7 +303,7 @@ router.post("/addEmployee",function(req,res){
 router.get("/viewEmployee",function(req,res){
 
 	if(req.user){
-
+        // console.log("Bhushannnnnn1");
 		let emp_id=req.query.emp_id;
 	if(emp_id){
 		console.log("hii",req.query.update);
@@ -312,6 +312,7 @@ router.get("/viewEmployee",function(req,res){
 		db.query(sql,function(err,result){
 
 			if(err){
+          // console.log("Bhushannnnnn3");
 				res.redirect("/employees");
 			} else{
 
@@ -331,7 +332,7 @@ router.get("/viewEmployee",function(req,res){
 						sellObject=result1;
 						let orderObject;
 
-						let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.customer_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"' order by Orders.dely_date desc LIMIT 3";
+						let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"' order by Orders.dely_date desc LIMIT 3";
 						db.query(sql2,function(err,result2){
 
 							if(err){
@@ -380,9 +381,9 @@ router.get("/viewEmployee",function(req,res){
 
 	}
 
-	
 
-	
+
+
 
 });
 
@@ -415,8 +416,8 @@ router.get("/getInfoEmployee",function(req,res){
 	} else{
 
 		res.redirect("/login");
-	}	
-	
+	}
+
 
 });
 
@@ -427,7 +428,7 @@ router.get("/viewAllOrders",function(req,res){
 		console.log(req.query.emp_id);
 
 		let emp_id=req.query.emp_id;
-		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.customer_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"'";
+		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.emp_id='"+emp_id+"'";
 		db.query(sql2,function(err,result){
 
 			if(err){
@@ -444,7 +445,7 @@ router.get("/viewAllOrders",function(req,res){
 
 	}
 
-	
+
 
 
 });
@@ -480,11 +481,11 @@ router.post("/updateEmployee",function(req,res){
 
 		})
 
-		
+
 
 
 	} else{
-		
+
 		res.redirect("/employees");
 
 	}
@@ -516,7 +517,7 @@ router.post("/giveAccess",function(req,res){
 
 
 
-	
+
 
 });
 
@@ -569,7 +570,7 @@ router.post("/takeAccess",function(req,res){
 
 
 
-	
+
 
 });
 

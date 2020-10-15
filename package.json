@@ -17,13 +17,14 @@
   },
   "homepage": "https://github.com/DBMS-Mini-Project/Bhushan-Project#readme",
   "dependencies": {
-    "express": "*",
     "body-parser": "*",
-    "mysql": "*",
+    "chart.js": "^2.9.3",
+    "cookie-parser": "*",
     "ejs": "*",
-    "passport": "*",
+    "express": "*",
     "express-session": "*",
-    "passport-local": "*",
-    "cookie-parser": "*"
+    "mysql": "*",
+    "passport": "*",
+    "passport-local": "*"
   }
 }

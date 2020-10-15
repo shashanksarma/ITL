@@ -18,8 +18,8 @@ app.use(bodyParser.json());
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
-  database : "CarShowroom"
+  password: "shashank@123",
+  database : "miniproject"
 
 });
 
@@ -36,12 +36,12 @@ db.connect(function(err) {
   //let sql="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
   //let sql="SELECT YEAR(joining_date) AS YEAR FROM Employee GROUP BY YEAR(joining_date)";
   //let sql ="SELECT   Employee.emp_id,Employee.salary FROM Employee,Orders where Employee.emp_id=Orders.emp_id AND Employee.salary=300000 GROUP BY Employee.emp_id ";
-  
+
   /*let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc ";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
-		
+
 	});*/
 
 
@@ -102,14 +102,14 @@ router.post("/createOrder",function(req,res){
 				console.log(result1);
 
 				let order_id="O0"+result1[0].count;
-				
+
 				let sql2="SELECT COUNT(payment_id) as count FROM payment";
 				db.query(sql2,function(err,result2){
 					if(err) throw err;
 					console.log(result2);
 
 					let payment_id="P0"+result2[0].count;
-					
+
 
 						let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_model+"'";
 						db.query(sql4,function(err,result4){
@@ -140,7 +140,7 @@ router.post("/createOrder",function(req,res){
 
 											})
 
-									
+
 
 										})
 
@@ -181,14 +181,14 @@ router.post("/createOrder",function(req,res){
 							console.log(result1);
 
 							let order_id="O0"+result1[0].count;
-							
+
 							let sql2="SELECT COUNT(payment_id) as count FROM payment";
 							db.query(sql2,function(err,result2){
 								if(err) throw err;
 								console.log(result2);
 
 								let payment_id="P0"+result2[0].count;
-								
+
 
 									let sql4="SELECT qty_available,price FROM car_details where car_id='"+body.car_model+"'";
 									db.query(sql4,function(err,result4){
@@ -219,7 +219,7 @@ router.post("/createOrder",function(req,res){
 
 														})
 
-												
+
 
 													})
 

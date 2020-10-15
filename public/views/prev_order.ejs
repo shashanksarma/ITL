@@ -12,26 +12,42 @@
 <body>
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">CarShowroom</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li ><a href="#">Home</a></li>
-      <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CarShowroom</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li ><a href="/employees">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">View Order</a></li>
+            <li><a href="#">Place Order</a></li>
+            <li><a href="#">Previous Order</a></li>
+          </ul>
+        </li>
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">View Order</a></li>
-          <li><a href="#">Place Order</a></li>
-          <li><a href="#">Previous Order</a></li>
+          <li><a href="/product/addproduct">New Product</a></li>
+          <li><a href="/product">View Product</a></li>
+          <li><a href="/product/extras/addextras">New Extra</a></li>
+          <li><a href="/product/extras">View Extra</a></li>
+
         </ul>
       </li>
-      <li><a href="#">Products</a></li>
-      <li><a href="#">Employees</a></li>
-    </ul>
-  </div>
-</nav>
 
+
+          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/employees/addEmployee">New Employee</a></li>
+            <li><a href="/employees">View Employee</a></li>
+            <li><a href="/logout">LogOut</a></li>
+
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
 <div class="col-lg-8" style="width:100%;background-image:url('prevord_cover.jpg');background-repeat:no-repeat;">
 	<form action="" name="MAIN" method="post">
     <div class="fld">
@@ -64,7 +80,7 @@
                 	</script></td>
                 </tr>
         	</table>
-            
+
         	<center><input type="submit" value="SUBMIT" class="subm"></center>
     	</fieldset>
     </div>

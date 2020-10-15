@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Product List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style >
+    #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:10%;
+  font-size: 18px;
+}
+#yesBtn{
+  position: relative;
+  top:24%;
+  left:30%;
+}
+#cancelBtn{
+  position: relative;
+
+  left:50%;
+}
+
+  </style>
+
+
+</head>
+<body>
+
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CarShowroom</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li ><a href="/employees">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">View Order</a></li>
+            <li><a href="#">Place Order</a></li>
+            <li><a href="#">Previous Order</a></li>
+          </ul>
+        </li>
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/product/addproduct">New Product</a></li>
+          <li><a href="/product">View Product</a></li>
+          <li><a href="/product/extras/addextras">New Extra</a></li>
+          <li><a href="/product/extras">View Extra</a></li>
+
+        </ul>
+      </li>
+
+
+          <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/employees/addEmployee">New Employee</a></li>
+            <li><a href="/employees">View Employee</a></li>
+            <li><a href="/logout">LogOut</a></li>
+
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8" style="padding-top:5% ">
+      <div class="row">
+        <h2 id="searchHead">Our Selling Cars</h2>
+      </div>
+      <div class="row" style="padding: 20px"></div>
+      <div class="row" id="infoDiv">
+        <%rows.forEach(function(item){%>
+          <div class="row" style="box-shadow: 2px 2px 5px 5px grey;">
+            <div class="col-lg-4">
+              <img src="../images/<%=item.car_id%>.png" style="width:100%;padding-top:12%;padding-left:7%">
+            </div>
+            <div class="col-lg-8">
+
+              <h4 style="text-align: center;border-bottom: 1px solid black">INFO</h4>
+              <div class="row" style="padding-left: 10px;">
+              <div class="col-lg-6">
+              <p><strong>Model No: </strong> <%=item.model_no%></p>
+              <p><strong>Car-ID: </strong> <%=item.car_id%></p>
+              <p><strong>Transmission: </strong><%=item.transmission%></p>
+              <p><strong>Type: </strong><%=item.type%></p>
+              <p><strong>Price: </strong>  <%=item.price%></p>
+              <p><strong>Sold: </strong>  <%=item.cars_sold%></p>
+            </div>
+            <div class="col-lg-6" style="padding-left: 10%">
+              <button><a href="/product/viewProduct?car_id=<%=item.car_id%>">view more</a></button><br>
+              <div style="padding: 5px"></div>
+              <%if(user){%>
+              <button onclick="delPOP('<%=item.car_id%>');" id="<%=item.car_id%>">del</button>
+              <%}%>
+            </div>
+            </div>
+            </div>
+          </div>
+          <div class="row" style="padding: 25px"></div>
+          <%})%>
+
+
+
+
+
+      </div>
+</div>
+  <div class="col-lg-4" style="border-left: 5px solid black;position: fixed;right:0%;top:50px;height: 100%">
+    <h1 style="text-align: center;border-bottom: 2px solid black;">Filters</h1>
+    <!-- <p>Do all the filter processing here</p> -->
+      <label for="sortby">Sort by:</label>
+      <select id="sortby" name="sortby">
+        <option value="cars_sold" selected>Cars Sold</option>
+        <option value="car_id">CarID</option>
+        <option value="price">Price</option>
+        <option value="qty_available">Quantity</option>
+      </select><br><br>
+      <label for="type">Car type:</label>
+      <select id="type" name="type">
+        <option value="none" selected>Select</option>
+        <option value="SUV">SUV</option>
+        <option value="Sedan">Sedan</option>
+        <option value="Sports">Sports</option>
+        <option value="Hatchback">Hatchback</option>
+      </select><br><br>
+      <label for="transmission">Transmission:</label>
+      <select id="transmission" name="transmission">
+        <option value="none" selected>Select</option>
+        <option value="Manual">Manual</option>
+        <option value="Automatic">Automatic</option>
+      </select><br><br>
+      <label for="fueltype">Fuel Type:</label>
+      <select id="fueltype" name="fueltype">
+        <option value="none" selected>Select</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Diesel">Diesel</option>
+      </select><br><br>
+      <label for="year">Year:</label>
+      <input id="year" type="text" name="year" placeholder="Year"><br><br>
+      <label for="capacity">Capacity:</label>
+      <input id="capacity" type="text" name="capacity" placeholder="Capacity"><br><br>
+      <button onclick="checkFilters();">Submit</button>
+  </div>
+</div>
+<div id="overlay">
+
+
+
+</div>
+</div>
+
+</body>
+<script>
+  let checkFilters=function(){
+    let sort= document.getElementById('sortby').value;
+    let type=document.getElementById('type').value;
+    let transmission=document.getElementById('transmission').value;
+    let fuel_type=document.getElementById('fueltype').value;
+    let year= document.getElementById('year').value;
+    let capacity= document.getElementById('capacity').value;
+
+    let dataSelected= {
+      sort:sort,
+      type:type,
+      transmission:transmission,
+      fuel_type:fuel_type,
+      year:year,
+      capacity:capacity
+    }
+
+
+    console.log(dataSelected,"hehe");
+
+    fetch("/product/filterproduct",{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json;charset=utf-8'
+      },
+      body:JSON.stringify(dataSelected)
+  })
+  .then(response => response.json())
+  .then(rows=>{
+    console.log(rows);
+    let infoDiv=document.getElementById('infoDiv');
+    let searchHead=document.getElementById('searchHead');
+    searchHead.innerHTML="Your Filtered Search";
+    infoDiv.innerHTML="";
+    rows.checkObject.forEach(function(item){
+      filter=true;
+
+  if(rows.user){
+      infoDiv.innerHTML+="  <div class='row' style='box-shadow: 5px 5px 5px 5px black;'>"+
+              "<div class='col-lg-4'>"+
+                "<img src='../images/"+item.car_id+".png' style='width:100%;padding-top:12%;padding-left:7%'>"+
+              "</div>"+
+              "<div class='col-lg-8'>"+
+
+                "<h4 style='text-align: center;border-bottom: 1px solid black'>INFO</h4>"+
+                "<div class='row' style='padding-left: 10px;'>"+
+                "<div class='col-lg-6'>"+
+                "<p><strong>Model No:</strong>"+ item.model_no+"</p>"+
+                "<p><strong>Car-ID: </strong>"+ item.car_id+"</p>"+
+                "<p><strong>Transmission: </strong>"+  item.transmission+"</p>"+
+                "<p><strong>Type: </strong>"+item.type+"</p>"+
+                "<p><strong>Price: </strong>"+item.price+"</p>"+
+                "<p><strong>Sold: </strong>"+item.cars_sold+"</p>"+
+              "</div>"+
+              "<div class='col-lg-6' style='padding-left: 10%'>"+
+                "<button><a href='/product/viewProduct?car_id="+item.car_id+"'>view more</a></button><br>"+
+                "<div style='padding: 5px'></div>"+
+
+              "<button onclick='delPOP("+item.car_id+");' id="+item.car_id+">del</button>"+
+
+              "</div>"+
+              "</div>"+
+              "</div>"+
+            "</div>"+
+            "<div class='row' style='padding: 25px'></div>";
+}
+else{
+  infoDiv.innerHTML+="  <div class='row' style='box-shadow: 5px 5px 5px 5px black;'>"+
+          "<div class='col-lg-4'>"+
+            "<img src='../images/"+item.car_id+".png' style='width:100%;padding-top:12%;padding-left:7%'>"+
+          "</div>"+
+          "<div class='col-lg-8'>"+
+
+            "<h4 style='text-align: center;border-bottom: 1px solid black'>INFO</h4>"+
+            "<div class='row' style='padding-left: 10px;'>"+
+            "<div class='col-lg-6'>"+
+            "<p><strong>Model No:</strong>"+ item.model_no+"</p>"+
+            "<p><strong>Car-ID: </strong>"+ item.car_id+"</p>"+
+            "<p><strong>Transmission: </strong>"+  item.transmission+"</p>"+
+            "<p><strong>Type: </strong>"+item.type+"</p>"+
+            "<p><strong>Price: </strong>"+item.price+"</p>"+
+            "<p><strong>Sold: </strong>"+item.cars_sold+"</p>"+
+          "</div>"+
+          "<div class='col-lg-6' style='padding-left: 10%'>"+
+            "<button><a href='/product/viewProduct?car_id="+item.car_id+"'>view more</a></button><br>"+
+            "<div style='padding: 5px'></div>"+
+          "</div>"+
+          "</div>"+
+          "</div>"+
+        "</div>"+
+        "<div class='row' style='padding: 25px'></div>";
+}
+
+    });
+  })
+  }
+
+
+  var delProduct = function(item){
+
+    console.log(item.id,"heee");
+    off();
+    let delObject=document.getElementById(item.id);
+    console.log(delObject);
+    //delObject.parentNode.parentNode.remove();
+
+
+    //console.log(delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling);
+
+
+
+
+
+
+
+     fetch("/product/delProduct",{
+        method:"POST",
+        headers:{
+        'Content-Type':'application/json;charset=utf-8'
+        },
+        body:JSON.stringify({item:item.id})
+      })
+      .then(response=>response.json())
+      .then(result=>{
+            console.log(result);
+
+            console.log(delObject,item.id);
+
+            if(result.done){
+
+                //delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling.remove();
+                delObject.parentNode.parentNode.parentNode.parentNode.remove();
+
+                on();
+                let overlay=document.getElementById('overlay');
+                overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                  "<div id='warning' >"+
+                    "<p id='textMsg'>There was some error in the input you have provided.<br>Please porvide the inputs in proper format</p>"+
+                  "</div>"+
+                  "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                    "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+                  "</div>"+
+
+                "</div>"
+
+
+                let message=document.getElementById('textMsg');
+                message.innerHTML="Product with ID = "+result.item+" has been deleted";
+
+
+            } else{
+
+                on();
+                console.log("could not delete");
+                let overlay=document.getElementById('overlay');
+                overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                  "<div id='warning' >"+
+                    "<p id='textMsg'>There was some error in the input you have provided.<br>Please porvide the inputs in proper format</p>"+
+                  "</div>"+
+                  "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                    "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white;'>close</button>"+
+                  "</div>"+
+
+                "</div>"
+                let message=document.getElementById('textMsg');
+                message.innerHTML="There was some error while deleting the Product.<br>Sorry Please try again."
+
+
+            }
+
+
+    });
+
+  }
+
+let filter=false;
+
+  function on() {
+    document.getElementById("overlay").style.display = "block";
+  }
+  function off() {
+    document.getElementById("overlay").style.display = "none";
+  }
+
+
+  function delPOP(item){
+    if(filter)
+    {
+      item=item.id;
+    }
+  console.log(item,"hii");
+  document.getElementById("overlay").style.display = "block";
+
+  let overlay=document.getElementById('overlay');
+  overlay.innerHTML="<div class='container-fluid;' id='addME'>"+
+    "<div id='warning' >"+
+     " <p id='textMsg'>Are You sure you want to delete Product with ID "+item+"</p>"+
+    "</div>"+
+    "<div id='yesBtn'>"+
+      "<button onclick='delProduct("+item+");' class='btn btn-default btn-lg' style='background-color: black;color: white'>YES</button>"+
+
+    "</div>"+
+   " <div id='cancelBtn'>"+
+      "<button onclick='off();' class='btn btn-default btn-lg' >CANCEL</button>"+
+
+    "</div>"+
+
+  "</div>";
+
+  console.log(overlay);
+
+}
+</script>
+</html>

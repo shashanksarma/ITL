@@ -30,8 +30,8 @@ passport.deserializeUser(function(user,done){
 var db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
-  database : "CarShowroom"
+  password: "shashank@123",
+  database : "miniproject"
 
 });
 
@@ -55,7 +55,7 @@ db.connect(function(err) {
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
-		
+
 	});
 
 
@@ -70,7 +70,7 @@ passport.use("local-sigin",new LocalStrategy({passReqToCallback:true},
 
 			if(result.length>0&&result[0].password==password){
 
-				done(null,{username:username,password:password});			
+				done(null,{username:username,password:password});
 
 			} else{
 				done(null,false);
@@ -78,7 +78,7 @@ passport.use("local-sigin",new LocalStrategy({passReqToCallback:true},
 
 		})
 
-			
+
 	}
 ));
 

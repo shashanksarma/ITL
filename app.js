@@ -9,6 +9,8 @@ var placeOrder=require('./routes/placeOrder');
 const passport=require('passport');
 var session=require("express-session");
 var cookieParser=require("cookie-parser");
+const mysqlConnection=require("./connections");
+const routes=require("./routes/products");
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, './public/views'));
@@ -20,6 +22,7 @@ app.use(bodyParser.json());
 app.use(session({secret:"supernova",saveUninitialized:true,resave:true}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/product",routes);
 
 var checkLog=function(req,res,next){
 

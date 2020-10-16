@@ -56,7 +56,9 @@ db.connect(function(err) {
   //let sql="INSERT INTO Orders VALUES('O00111','2019-10-13','2019-10-15','C00002','010207','E00004','P00111',null)";
   //let sql="SELECT * FROM Orders where order_id='O00111'";
   //let sql='SELECT COUNT(car_id) as car_count,car_id FROM Orders GROUP BY car_id order by car_count desc LIMIT 4';
-  let sql="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
+  //let sql="SELECT COUNT(MONTH(dely_date)) as sell_count,dely_date FROM Orders where dely_date>=now() - INTERVAL 5 MONTH GROUP BY MONTH(dely_date)"
+  //let sql="ALTER TABLE Orders CHANGE customer_id cust_id int";
+  let sql="SELECT * FROM Orders";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);
@@ -282,7 +284,7 @@ router.post("/createOrder",check,function(req,res){
 															console.log(result3,"hii8");
 
 															//res.render("new_order",{condition:true});
-															res.redirect("/order/placeOrder");
+															res.redirect("/order/placeOrder?Order_status=successful");
 
 
 														})
@@ -295,7 +297,7 @@ router.post("/createOrder",check,function(req,res){
 															console.log(result3,"hii8");
 
 															//res.render("new_order",{condition:true});
-															res.redirect("/order/placeOrder");
+															res.redirect("/order/placeOrder?Order_status=successful");
 
 
 														})

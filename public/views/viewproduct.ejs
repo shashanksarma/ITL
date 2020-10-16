@@ -67,13 +67,13 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">CarShowroom</a>
+        <a class="navbar-brand" href="/home">CarShowroom</a>
       </div>
       <ul class="nav navbar-nav">
         <li ><a href="/home">Home</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="/order">Orders <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">View Order</a></li>
+            <li><a href="/order">View Order</a></li>
             <li><a href="/order/placeOrder">Place Order</a></li>
             <li><a href="/order/prevOrder">Previous Order</a></li>
           </ul>
@@ -194,7 +194,7 @@
         <img src="">
       </div>
       <div class="row" style="padding-left: 7%">
-        <p><strong><a>Order-No:</a></strong><%=item.order_id%> </p>
+        <p><strong><a href="/order/vieworder?order_id=<%=item.order_id%>">Order-No:</a></strong><%=item.order_id%> </p>
          <p><strong><a>Car-No:</a></strong><%=item.car_id%> </p>
           <p><strong>Cust-Name:</strong><%=item.cust_id%> </p>
       </div>
@@ -319,7 +319,7 @@
         "<img src=''>"+
       "</div>"+
       "<div class='row' style='padding-left: 7%'>"+
-        "<p><strong><a>Order-No:</a></strong>"+result.result[i].order_id+" </p>"+
+        "<p><strong><a href = '/order/vieworder?order_id="+result.result[i].order_id+"'>Order-No:</a></strong>"+result.result[i].order_id+" </p>"+
          "<p><strong><a>Car-No:</a></strong>"+result.result[i].car_id+" </p>"+
           "<p><strong>Cust-Name:</strong>"+result.result[i].cust_id+" </p>"+
       "</div>"+

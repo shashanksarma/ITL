@@ -51,7 +51,8 @@ Router.post("/addproduct",function(req,res){
   console.log(sql1);
   mysqlConnection.query(sql1, (err,result,fields)=>{
     if(err){
-			res.redirect("/product/addproduct?err=true");
+		throw err;
+			//res.redirect("/product/addproduct?err=true");
 		}
 		else{
 			console.log(result);

@@ -6,6 +6,7 @@ const mysql=require('mysql');
 var employee=require('./routes/employee');
 var login=require('./routes/login');
 var placeOrder=require('./routes/placeOrder');
+var order=require('./routes/order');
 const passport=require('passport');
 var session=require("express-session");
 var cookieParser=require("cookie-parser");
@@ -39,8 +40,8 @@ var checkLog=function(req,res,next){
 app.use('/',login);
 app.use('/employees',employee);
 app.use('/order',placeOrder);
+app.use('/order',order);
 
-/**/
 
 app.listen(8000,function(){
 	console.log("server is responding on port 8000");

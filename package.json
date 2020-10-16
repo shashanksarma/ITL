@@ -20,7 +20,7 @@
     "body-parser": "*",
     "chart.js": "^2.9.3",
     "cookie-parser": "*",
-    "ejs": "*",
+    "ejs": "^3.1.5",
     "express": "*",
     "express-session": "*",
     "mysql": "*",

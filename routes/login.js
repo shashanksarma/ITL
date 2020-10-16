@@ -52,7 +52,8 @@ db.connect(function(err) {
   //let sql="CREATE TABLE perSign(emp_id varchar(6),password varchar(20))";
   //let sql="CREATE TABLE tempSign(emp_id varchar(6))";
   //let sql="INSERT INTO tempSign VALUES('E00001'),('E00003'),('E00004'),('E00007')";
-  let sql='SELECT COUNT(Orders.car_id) as car_count,car_details.model_no FROM Orders LEFT JOIN car_details on car_details.car_id=Orders.car_id GROUP BY Orders.car_id order by car_count desc LIMIT 4';
+  //let sql='SELECT COUNT(Orders.car_id) as car_count,car_details.model_no FROM Orders LEFT JOIN car_details on car_details.car_id=Orders.car_id GROUP BY Orders.car_id order by car_count desc LIMIT 4';
+  let sql="DESC car_details";
   db.query(sql,function(err,result){
 		if(err) throw err;
 		console.log(result);

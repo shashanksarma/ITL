@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style >
+    #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:10%;
+  font-size: 18px;
+}
+#yesBtn{
+  position: relative;
+  top:24%;
+  left:30%;
+}
+#cancelBtn{
+  position: relative;
+  
+  left:50%;
+}
+
+  </style>
+
+
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="/employees">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li ><a href="#">Products</a></li>
+      
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/employees/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+      
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8" style="padding-top:5% ">
+      <div class="row">
+        <h2 id="searchHead">Our Top Employees</h2>
+      </div>
+      <div class="row" style="padding: 20px"></div>
+      <div class="row" id="infoDiv">
+        <%mainObject.forEach(function(item){%>
+          <div class="row" style="box-shadow: 5px 5px 5px 5px black;">
+            <div class="col-lg-4">
+              <p style="font-size: 100px;padding-left:35%;padding-top: 5%"><%=item.name[0]%></p>
+            </div>
+            <div class="col-lg-8">
+              
+              <h4 style="text-align: center;border-bottom: 1px solid black">INFO</h4>
+              <div class="row" style="padding-left: 10px;">
+              <div class="col-lg-6">
+              <p><strong>Name:</strong> <%=item.name%></p>
+              <p><strong>EMP-ID: </strong> <%=item.emp_id%></p>
+              <p><strong>Cars-Sold: </strong>  <%=item.cars_sold%></p>
+              <p><strong>Date Of Joining : </strong><%=item.joining_date%></p>
+            </div>
+            <div class="col-lg-6" style="padding-left: 10%">
+              <button><a href="/employees/viewEmployee?emp_id=<%=item.emp_id%>">view more</a></button><br>
+              <div style="padding: 5px"></div>
+              <button onclick="delPOP('<%=item.emp_id%>');" id='<%=item.emp_id%>'>del</button>
+            </div>
+            </div>
+            </div>
+          </div>
+          <div class="row" style="padding: 25px"></div>
+          <%})%>
+        
+        
+        
+          
+      
+      </div>
+</div>
+  <div class="col-lg-4" style="border-left: 5px solid black;position: fixed;right:0%;top:50px;height: 100%;overflow-y: auto">
+    <h1 style="text-align: center;border-bottom: 2px solid black;">Filter</h1>
+    <div class="row" style="padding-left: 20%">
+    <div class="row">
+    <p>Search by Info</p>
+    <label style="padding-left: 35px">EMP-ID:</label>
+    <input type="text" name="emp_id" id="emp_id"><br>
+    <label style="padding-left: 45px">Name:  </label>
+    <input type="text" name="name" id="name" ><br>
+     <label style="padding-left: 3px">MinSalaray : </label>
+       <input type="number" name="tocheck" id="minsal"><br>
+         <label >MaxSalaray : </label>
+       <input type="number" name="tocheck" id="maxsal"><br>
+    </div>
+
+    <div class="row" style="padding: 10px"></div>
+         <p>Search by join year</p>
+      <%joinYear.forEach(function(item){%>
+      <input type="checkbox" name="tocheck" class="joinyearbox" value="<%=item.YEAR%>"><label style="padding-left: 20px"><%=item.YEAR%></label><br>
+<%})%>
+    <div class="row" style="padding: 10px"></div>
+    <div class="row">
+
+
+    </div>
+    <div class="row" style="padding: 10px"></div>
+    <div class="row">
+      <p>Search by top perfomance</p>
+      <%topYear.forEach(function(item){%>
+      <input type="checkbox" name="tocheck" class="yearbox" value="<%=item.YEAR%>"><label style="padding-left: 20px"><%=item.YEAR%></label><br>
+ 
+    <%})%>
+    </div>
+    <button onclick="checkit();">check</button>
+  </div>
+    
+  </div>
+  
+</div>
+
+<div id="overlay">
+  
+
+  
+</div>
+
+</div>
+<script src="./js/check.js" charset="utf-8"></script>
+<script >
+  
+
+let name=<%-JSON.stringify(mainObject)%>;
+console.log(name);
+console.log(name[0]);
+/*<%mainObject.forEach(function(item){%>
+<%})%>*/
+
+var checkit=function(){
+      let yearbox = (function() {
+        let a = [];
+        $(".yearbox:checked").each(function() {
+            a.push(this.value);
+        });
+        return a;
+    })()
+    console.log(yearbox);
+
+    let statebox = (function() {
+        let a = [];
+        $(".statebox:checked").each(function() {
+            a.push(this.value);
+        });
+        return a;
+    })()
+    console.log(statebox);
+
+    let citybox = (function() {
+        let a = [];
+        $(".citybox:checked").each(function() {
+            a.push(this.value);
+        });
+        return a;
+    })()
+    console.log(citybox);
+
+    let joinyearbox = (function() {
+        let a = [];
+        $(".joinyearbox:checked").each(function() {
+            a.push(this.value);
+        });
+        return a;
+    })()
+    console.log(joinyearbox);
+
+
+  let emp_id=document.getElementById('emp_id').value;
+  let name=document.getElementById('name').value;
+  let minSal=document.getElementById('minsal').value;
+  let maxSal=document.getElementById('maxsal').value;
+
+  let dataSelected={
+    emp_id:emp_id,
+    name:name,
+    city:citybox,
+    state:statebox,
+    year:yearbox,
+    dateJoin:joinyearbox,
+    minSal:minSal,
+    maxSal:maxSal
+  }
+
+  console.log(dataSelected);
+
+  fetch("/employees/filterEmployee",{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json;charset=utf-8'
+      },
+      body:JSON.stringify(dataSelected)
+  })
+  .then(response=>response.json())
+  .then(result=>{
+    console.log(result);
+    let infoDiv=document.getElementById('infoDiv');
+    let searchHead=document.getElementById('searchHead');
+    searchHead.innerHTML="Your Filtered Search"
+    infoDiv.innerHTML="";
+
+    result.checkObject.forEach(function(item){
+      filter=true;
+      infoDiv.innerHTML+="  <div class='row' style='box-shadow: 5px 5px 5px 5px black;'>"+
+              "<div class='col-lg-4'>"+
+                "<p style='font-size: 100px;padding-left:35%;padding-top: 5%'>"+item.name[0]+"</p>"+
+              "</div>"+
+              "<div class='col-lg-8'>"+
+                
+                "<h4 style='text-align: center;border-bottom: 1px solid black'>INFO</h4>"+
+                "<div class='row' style='padding-left: 10px;'>"+
+                "<div class='col-lg-6'>"+
+                "<p><strong>Name:</strong>"+ item.name+"</p>"+
+                "<p><strong>EMP-ID: </strong>"+ item.emp_id+"</p>"+
+                "<p><strong>Cars-Sold: </strong>"+  item.cars_sold+"</p>"+
+                "<p><strong>Date Of Joining : </strong>"+item.joining_date+"</p>"+
+              "</div>"+
+              "<div class='col-lg-6' style='padding-left: 10%'>"+
+                "<button><a href='/employees/viewEmployee?emp_id="+item.emp_id+"'>view more</a></button><br>"+
+                "<div style='padding: 5px'></div>"+
+                "<button onclick='delPOP("+item.emp_id+");' id="+item.emp_id+">del</button>"+
+              "</div>"+
+              "</div>"+
+              "</div>"+
+            "</div>"+
+            "<div class='row' style='padding: 25px'></div>";
+
+
+    });
+  
+
+  })
+
+}
+
+let filter=false;
+
+var delEmp=function(item){
+
+  console.log(item.id,"heee");
+  off();
+  let delObject=document.getElementById(item.id);
+  console.log(delObject);
+  //delObject.parentNode.parentNode.remove();
+  
+
+  //console.log(delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling);
+
+
+             
+
+
+
+
+   fetch("/employees/delEmployee",{
+      method:"POST",
+      headers:{
+      'Content-Type':'application/json;charset=utf-8'
+      },
+      body:JSON.stringify({item:item.id})
+    })
+    .then(response=>response.json())
+    .then(result=>{
+          console.log(result);
+
+          
+           delObject.parentNode.parentNode.parentNode.parentNode.nextSibling.nextSibling.remove();
+              delObject.parentNode.parentNode.parentNode.parentNode.remove();
+          if(result.done){
+
+              
+
+              on();
+              let overlay=document.getElementById('overlay');
+              overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                "<div id='warning' >"+
+                  "<p id='textMsg'>There was some error in the input you have provided.<br>Please porvide the inputs in proper format</p>"+
+                "</div>"+
+                "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                  "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+                "</div>"+
+                
+              "</div>"
+
+
+              let message=document.getElementById('textMsg');
+              message.innerHTML="Employee with ID = "+result.item+" has been deleted";
+
+
+          } else{
+
+              on();
+              console.log("could not delete");
+              let overlay=document.getElementById('overlay');
+              overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                "<div id='warning' >"+
+                  "<p id='textMsg'>There was some error in the input you have provided.<br>Please porvide the inputs in proper format</p>"+
+                "</div>"+
+                "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                  "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white;'>close</button>"+
+                "</div>"+
+                
+              "</div>"
+              let message=document.getElementById('textMsg');
+              message.innerHTML="There was some error while deleting the Employee.<br>Sorry Please try again."
+
+
+
+          }
+
+
+  });
+
+}
+
+
+//on();
+function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+function delPOP(item){
+  if(filter){
+    item=item.id;
+  }
+  console.log(item,"hii");
+  document.getElementById("overlay").style.display = "block";
+
+  let overlay=document.getElementById('overlay');
+  overlay.innerHTML="<div class='container-fluid;' id='addME'>"+
+    "<div id='warning' >"+
+     " <p id='textMsg'>Are You sure you want to delete Employee with ID "+item+"</p>"+
+    "</div>"+
+    "<div id='yesBtn'>"+
+      "<button onclick='delEmp("+item+");' class='btn btn-default btn-lg' style='background-color: black;color: white'>YES</button>"+
+
+    "</div>"+
+   " <div id='cancelBtn'>"+
+      "<button onclick='off();' class='btn btn-default btn-lg' >CANCEL</button>"+
+      
+    "</div>"+
+    
+  "</div>";
+
+}
+
+
+
+</script>
+</body>
+</html>

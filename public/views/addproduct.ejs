@@ -80,13 +80,13 @@ input::-webkit-calendar-picker-indicator {
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">CarShowroom</a>
+        <a class="navbar-brand" href="/home">CarShowroom</a>
       </div>
       <ul class="nav navbar-nav">
         <li ><a href="/home">Home</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="/order">Orders <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">View Order</a></li>
+            <li><a href="/order">View Order</a></li>
             <li><a href="/order/placeOrder">Place Order</a></li>
             <li><a href="/order/prevOrder">Previous Order</a></li>
           </ul>
@@ -117,9 +117,9 @@ input::-webkit-calendar-picker-indicator {
 <div class="container">
   <div class="row" style="padding-top: 5%">
     <div class="col-lg" >
-      <h1 style="text-align: center;">Add New Product</h1>
+      <h1 style="text-align: center;">Add New Product<p id="image_input"></p></h1>
       <div class="row" style="padding-left: 18%;box-shadow: 2px 2px 8px 8px grey;padding-bottom: 3%;padding-top: 3%" >
-        <form id="prodForm" action="/product/addproduct" method="POST">
+        <form id="prodForm" action="/product/addproduct" enctype="multipart/form-data" method="POST">
         <div class="col-lg-5">
           <div class="row">
             <div class="form-group">
@@ -138,10 +138,11 @@ input::-webkit-calendar-picker-indicator {
               <label> Type :</label><br>
                 <input type="text" class="form-control" name="type">
             </div>
-            <div class="form-group">
-              <label> Upload Image :</label><br>
-                <input type="file" name="image" /></input>
-            </div>
+           
+              <label for="image_input">UPLOAD IMAGE: </label>
+               <input type="file" name="image" id="image_input" > 
+                
+        
 
           </div>
 
@@ -209,8 +210,19 @@ if(error){
 function off() {
   document.getElementById("overlay").style.display = "none";
 }
-
-
+console.log("hi");
+let image_input=document.getElementById("image_input");
+let image_input_name=document.getElementById("image_input_name");
+image_input.addEventListener("change",function(e){
+  let imageData;
+  console.log("hehe")
+    if(e.target.files.length){
+      imageData=e.target.files[0];
+      console.log(imageData);
+      //console.log(imageData.name);
+      image_input_name.innerHTML=imageData.name;
+    }
+  });
 
 </script>
 </body>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CAR SHOWROOM</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  
+  <style>
+    
+     #overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+  }
+  
+  #addME{
+    position:absolute;
+    top:10%;
+    left:25%;
+    width:45%;
+    height:30%;
+    border-radius: 5px;
+    background-color: white;
+  
+  }
+  
+  #warning{
+    position: relative;
+    top:10%;
+    left:10%;
+    font-size: 18px;
+  }
+  #yesBtn{
+    position: relative;
+    top:24%;
+    left:30%;
+  }
+  #cancelBtn{
+    position: relative;
+    
+    left:50%;
+  }
+  
+  
+  
+  </style>
+  
+  
+  </head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/home">CarShowroom</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li ><a href="/home">Home</a></li>
+        <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="/order">Orders <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/order">View Order</a></li>
+            <li><a href="/order/placeOrder">Place Order</a></li>
+            <li><a href="/order/prevOrder">Previous Order</a></li>
+          </ul>
+        </li>
+        <li class="dropdown " ><a class="dropdown-toggle" data-toggle="dropdown" href="/product">Product <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/product/addproduct">New Product</a></li>
+          <li><a href="/product">View Product</a></li>
+          <li><a href="/product/extras/addextras">New Extra</a></li>
+          <li><a href="/product/extras">View Extra</a></li>
+
+        </ul>
+      </li>
+
+
+          <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown" href="/employees">Employees <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/employees/addEmployee">New Employee</a></li>
+            <li><a href="/employees">View Employee</a></li>
+            <li><a href="/logout">LogOut</a></li>
+
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+<div class="container">
+  <div class="row" style="padding-top: 5%">
+    <div class="col-lg" >
+      <h1 style="text-align: center;">ORDER DETAILS</h1>
+      <div class="row" style="padding-left: 18%;box-shadow: 2px 2px 8px 8px rgb(199, 199, 199);padding-bottom: 3%;padding-top: 3%" >
+      <div id="infoDiv">
+        <div class="row" style="padding-top: 20px;">
+         <div class="col-lg-6">
+          <p><strong>ORDER_ID :</strong> <span id="order_id"><%=userObject[0].order_id%></span></p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>EMP_ID :</strong><span id="emp_id"><%=userObject[0].emp_id%> </span></p>
+         </div>
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>DATE_ORDER :</strong><span id="date_order"><%=userObject[0].date_order%></span> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>CUSTOMER_ID:</strong> <span id="customer_id"><%=userObject[0].cust_id%></span></p>
+         </div>
+        </div>
+        <div class="row" style="padding-top: 20px;">
+           <div class="col-lg-6">
+            <p><strong>DELY_DATE :</strong><span id="dely_date"><%=userObject[0].dely_date%></span> </p> 
+             </div>   
+             <div class="col-lg-6">
+              <p><strong>CLIENT_NAME:</strong><span id="name"><%=userObject[0].name%></span> </p>
+             </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-lg-6">
+         <p><strong>ADDRESS :</strong><span id="address"><%=userObject[0].address%></span> </p>
+        </div>
+        <div class="col-lg-6">
+         <p><strong>PHONE_NO:</strong><span id="phone_no"><%=userObject[0].phone_no%></span> </p>
+        </div>
+       
+ 
+   </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>CAR_ID :</strong><span id="car_id"><%=userObject[0].car_id%></span> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>EXTRA_ID:</strong><span id="extra_id"><%=userObject[0].extra_id%></span> </p>
+         </div>
+        
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+        <p><strong>PAYMENT_ID :</strong><span id="payment_id"><%=userObject[0].payment_id%></span> </p> 
+         </div>
+  
+       <div class="col-lg-6">
+        <p><strong>TOTAL_COST :</strong><span id="total_cost"><%=userObject[0].total_cost%></span> </p> 
+         </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+        <p><strong>PAID_AMOUNT :</strong><span id="paid_amount"><%=userObject[0].paid_amount%></span> </p> 
+         </div>
+  
+       <div class="col-lg-6">
+        <p><strong>PAYMENT_METHOD :</strong><span id="payment_method"><%=userObject[0].payment_method%></span> </p> 
+         </div>
+        </div>
+        <br>
+         <div class="row" style="padding-top: 20px;padding-left: 35%">
+       
+         <button class="btn btn-default btn-md" style="background-color: rgb(0, 0, 0);color: white" onclick="edit();">Edit</button>
+         
+    </div>
+    </div>
+    </div>
+  
+  </div>
+    
+   
+  </div>
+  </div>
+</div>
+  
+
+<div id="overlay">
+  
+
+  
+</div>
+<script >
+   $("input").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
+   window.onload = function () {
+    /* Grab all elements with a placeholder attribute */
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+}
+
+let userObject=<%-JSON.stringify(userObject)%>
+  console.log("hii",userObject)
+
+
+  let tempSave;
+
+  var edit=function(){
+    console.log("hi");
+
+
+
+    let infoDiv=document.getElementById("infoDiv");
+    tempSave=infoDiv.innerHTML;
+    console.log(tempSave);
+
+    infoDiv.innerHTML="<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-5'>"+
+          "<label>ORDER_ID : </label><input type='text' class='form-control' name='order_id' id='order_id' placeholder='"+userObject[0].order_id+"' defaultValue='"+userObject[0].order_id+"'>"+
+         "</div>"+
+         "<div class='col-lg-5'>"+
+           "<label>EMP_ID : </label><input type='text' class='form-control' name='emp_id' id='emp_id' placeholder='"+userObject[0].emp_id+"' defaultValue='"+userObject[0].emp_id+"'   >"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-5'>"+
+          "<label>DATE_ORDER : </label><input type='date' class='form-control' name='date_order' id='date_order' placeholder='"+userObject[0].date_order+"' defaultValue='"+userObject[0].date_order+"' required>"+
+         "</div>"+
+         "<div class='col-lg-5'>"+
+           "<label>CUSTOMER_ID : </label><input type='text' class='form-control' name='customer_id' id='customer_id' placeholder='"+userObject[0].cust_id+"' defaultValue='"+userObject[0].cust_id+"'>"+
+         "</div>"+
+         "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-5'>"+
+        "<label>DELY_DATE : </label><input type='date' class='form-control' name='dely_date' id='dely_date' placeholder='"+userObject[0].dely_date+"' defaultValue='"+userObject[0].dely_date+ "'>"+
+        "</div>"+   
+        "<div class='col-lg-5'>"+
+           "<label>NAME : </label><input type='text' class='form-control' name='name' id='name' placeholder='"+userObject[0].name+"' defaultValue='"+userObject[0].name+ "'>"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+     "  <div class='col-lg-5'>"+
+          
+         "<label>ADDRESS : </label><input type='text' class='form-control' name='address' id='address' placeholder='"+userObject[0].address+"' defaultValue='"+userObject[0].address+"'>"+
+         "</div>"+
+         "<div class='col-lg-5'>"+
+           "<label>PHONE_NO : </label><input type='text' class='form-control' name='phone_no' id='phone_no' placeholder='"+userObject[0].phone_no+"' defaultValue='"+userObject[0].phone_no+ "'>"+
+         "</div>"+
+        
+  
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+     "  <div class='col-lg-5'>"+
+          
+         "<label>CAR_ID : </label><input type='text' class='form-control' name='car_id' id='car_id' placeholder='"+userObject[0].car_id+"' defaultValue='"+userObject[0].car_id+"'>"+
+         "</div>"+
+         "<div class='col-lg-5'>"+
+           "<label>EXTRA_ID : </label><input type='text' class='form-control' name='extra_id' id='extra_id' placeholder='"+userObject[0].extra_id+"' defaultValue='"+userObject[0].extra_id+ "'>"+
+         "</div>"+
+        
+  
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-5'>"+
+        "<label>PAYMENT_ID : </label><input type='text' class='form-control' name='payment_id' id='payment_id' placeholder='"+userObject[0].payment_id+"' defaultValue='"+userObject[0].payment_id+ "'>"+
+        "</div>"+
+        "<div class='col-lg-5'>"+
+        "<label>PAYMENT_METHOD : </label><input type='text' class='form-control' name='payment_method' id='payment_method' placeholder='"+userObject[0].payment_method+"' defaultValue='"+userObject[0].payment_method+ "'>"+
+        "</div>"+ 
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-5'>"+
+          "<label>TOTAL_COST : </label><input type='text' class='form-control' name='total_cost' id='total_cost' defaultValue='"+userObject[0].total_cost+"' placeholder='"+userObject[0].total_cost+"' >"+
+         "</div>"+
+         "<div class='col-lg-5'>"+
+           "<label>PAID_AMOUNT : </label><input type='text' class='form-control' name='paid_amount' id='paid_amount' defaultValue='"+userObject[0].paid_amount+"' placeholder='"+userObject[0].paid_amount+"'>"+
+         "</div>"+
+         "</div>"+
+
+         "<div class='row' style='padding-top: 10px;padding-left: 20%'>"+
+       
+         "<button class='btn btn-default btn-md' style='background-color: black;color: white' onclick='editFetch()'>Edit</button>"+
+         "<button class='btn btn-default btn-md' style='position: relative;left: 30%' type='button' onclick='cancelEdit();'>Cancel</button>"+
+         
+    "</div>";
+   
+
+
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+
+  }
+
+var cancelEdit=function(){
+  console.log("hi");
+
+  let infoDiv=document.getElementById('infoDiv');
+  infoDiv.innerHTML=tempSave;
+
+
+
+}
+
+
+var editFetch=function(){
+
+  console.log("hii");
+
+  let order_id=document.getElementById('order_id');
+  let emp_id=document.getElementById('emp_id');
+  let date_order=document.getElementById('date_order');
+  let customer_id=document.getElementById('customer_id');
+  let dely_date=document.getElementById('dely_date');
+  let name=document.getElementById('name');
+  let address=document.getElementById('address');
+  let phone_no=document.getElementById('phone_no');
+  let car_id=document.getElementById('car_id');
+  let extra_id=document.getElementById('extra_id');
+  let payment_id=document.getElementById('payment_id');
+  let total_cost=document.getElementById('total_cost');
+  let paid_amount=document.getElementById('paid_amount');
+  let payment_method=document.getElementById('payment_method');
+  console.log(order_id.value,emp_id.value,date_order.value,customer_id.value,dely_date.value,car_id.value,extra_id.value,payment_id.value,total_cost.value,paid_amount.value,payment_method.value);
+
+
+    let updateInfo={
+    where:userObject[0].order_id,
+    there:userObject[0].payment_id,
+    here:userObject[0].customer_id,
+    order_id:order_id.value,
+    emp_id:emp_id.value,
+    customer_id:customer_id.value,
+    dely_date:dely_date.value,
+    name:name.value,
+    address:address.value,
+    phone_no:phone_no.value,
+    car_id:car_id.value,
+    extra_id:extra_id.value,
+    payment_id:payment_id.value,
+    date_order:date_order.value,
+    payment_method:payment_method.value,
+    paid_amount:paid_amount.value,
+    total_cost:total_cost.value
+  }
+
+  console.log(updateInfo);
+
+  fetch("/order/updateorder",{
+      method:"POST",
+      headers:{
+      'Content-Type':'application/json;charset=utf-8'
+      },
+      body:JSON.stringify(updateInfo)
+    }).then(response=>response.json())
+    .then(result=>{
+      console.log(result);
+      if(result.done){
+
+        let infoDiv=document.getElementById('infoDiv');
+        infoDiv.innerHTML=tempSave;
+
+        document.getElementById('order_id').innerHTML=result.update[0].order_id;
+        document.getElementById('emp_id').innerHTML=result.update[0].emp_id;
+        document.getElementById('date_order').innerHTML=result.update[0].date_order;
+        document.getElementById('customer_id').innerHTML=result.update[0].cust_id;
+        document.getElementById('dely_date').innerHTML=result.update[0].dely_date;
+        document.getElementById('name').innerHTML=result.update[0].name;
+        document.getElementById('address').innerHTML=result.update[0].address;
+        document.getElementById('phone_no').innerHTML=result.update[0].phone_no;
+        document.getElementById('car_id').innerHTML=result.update[0].car_id;
+        document.getElementById('extra_id').innerHTML=result.update[0].extra_id;
+        document.getElementById('payment_id').innerHTML=result.update[0].payment_id;
+        document.getElementById('total_cost').innerHTML=result.update[0].total_cost;
+        document.getElementById('paid_amount').innerHTML=result.update[0].paid_amount;
+        document.getElementById('payment_method').innerHTML=result.update[0].payment_method;
+
+        on("The information of the order has been updated.");
+        
+
+
+    
+
+      }
+
+  
+  })
+
+}
+
+function on(item) {
+  document.getElementById("overlay").style.display = "block";
+  let overlay=document.getElementById('overlay');
+              overlay.innerHTML="<div class='container-fluid' id='addME'>"+
+                "<div id='warning' >"+
+                  "<p id='textMsg'>"+item+"<br></p>"+
+                "</div>"+
+                "<div id='closeBtn' style='padding-left:40%;padding-top:20px'>"+
+                  "<button onclick='off();' class='btn btn-default btn-lg' style='background-color: black;color: white'>close</button>"+
+                "</div>"+
+                
+              "</div>"
+
+
+
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>

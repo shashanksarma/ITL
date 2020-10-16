@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="/addEmployee">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li ><a href="#">Products</a></li>
+      
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="http://localhost:8000/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <div class="row">
+  <div class="col-lg-4" style="border-right: 5px solid black;position: fixed;left:0%;top:50px;height: 100%;overflow-y: auto" >
+    <div class="row" style="padding-top:15px ;border-bottom: 1px solid black;padding-bottom: 2%">
+      <p style="text-align: center;font-size: 11rem"><%=userObject[0].name[0]%></p>
+    </div>
+      <div id="infoDiv">
+        <div class="row" style="padding-top: 20px;">
+         <div class="col-lg-6">
+          <p><strong>EMP-ID :</strong> <%=userObject[0].emp_id%></p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Name :</strong><%=userObject[0].name%> </p>
+         </div>
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>DOB :</strong><%=userObject[0].dob%> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Join Date:</strong> <%=userObject[0].joining_date%></p>
+         </div>
+        
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-6">
+          <p><strong>Phone-No :</strong><%=userObject[0].phone_no%> </p>
+         </div>
+         <div class="col-lg-6">
+          <p><strong>Salary:</strong> <%=userObject[0].salary%></p>
+         </div>
+        
+  
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>Address:</strong><%=userObject[0].address%> </p> 
+         </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>City:</strong><%=userObject[0].city%> </p> 
+         </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+       <div class="col-lg-12">
+        <p><strong>State:</strong><%=userObject[0].state%> </p> 
+         </div>
+         <div class="row" style="padding-top: 20px;padding-left: 40%">
+       
+         <button class="btn btn-default btn-md" style="background-color: black;color: white" onclick="edit();">Edit</button>
+         
+    </div>
+    </div>
+    </div>
+  
+  </div>
+    
+    
+  
+</div>
+<div class="col-lg-12" style="padding-left: 34%;padding-top:5%">
+  <h3>Do all the Object rendering here</h3>
+  <h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3><h3>Do all the Object rendering here</h3>
+  <input type="date" placeholder="2013-01-25" /><button onclick="viewAllOrders();">click</button>
+  <div class="row">
+    <h3 style="border-bottom: 2px solid black">Do all the Object rendering here</h3>
+  </div>
+  <div class="row" style="padding-left: 10px">
+  <%sellObject.forEach(function(item){%> 
+    <div class="col-lg-3" style="box-shadow: 2px 2px 5px 5px grey">
+      <div class="row">
+        <img src="">
+      </div>
+      <div class="row" style="padding-left: 7%">
+        <p><strong><a>Order-No:</a></strong><%=item.order_id%> </p>
+         <p><strong><a>Car-No:</a></strong><%=item.car_id%> </p>
+          <p><strong>Cust-Name:</strong><%=item.customer_id%> </p>
+      </div>
+    </div>
+    <div class= "col-lg-1" style="padding:10px"></div>
+    <%})%>
+    
+  </div>
+  
+</div>
+   
+  </div>
+  
+
+</div>
+<script >
+   $("input").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
+   window.onload = function () {
+    /* Grab all elements with a placeholder attribute */
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+}
+
+
+    let userObject=<%-JSON.stringify(userObject)%>
+  console.log("hii",userObject)
+
+  let sellObject=<%-JSON.stringify(sellObject)%>
+  console.log("hii2",sellObject);
+
+  let orderObject=<%-JSON.stringify(orderObject)%>
+   
+  console.log("hii3",orderObject);
+  
+  let update=<%-JSON.stringify(update)%>
+  console.log("hii4",update);
+
+
+
+  var viewAllOrders=function(){
+
+    console.log("hello");
+    fetch("/viewAllOrders?emp_id="+userObject[0].emp_id)
+    .then(response=>response.json())
+    .then(result=>{
+      console.log(result);
+
+
+
+    })
+
+
+
+  }
+
+  var edit=function(){
+    console.log("hi");
+
+    let infoDiv=document.getElementById("infoDiv");
+    infoDiv.innerHTML="<form action='/updateEmployee' method='POST' id='empForm'>"+
+       "<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-6'>"+
+          "<label>EMP-ID : </label><input type='text' class='form-control' name='emp_id' id='input_emp_id' placeholder="+userObject[0].emp_id+" value="+userObject[0].emp_id+" disabled>"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Name : </label><input type='text' class='form-control' name='name' id='input_name' placeholder="+userObject[0].name+" value="+userObject[0].name+"   >"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-6'>"+
+          "<label>DOB : </label><input type='date' class='form-control' name='dob' id='input_emp_id' placeholder="+userObject[0].dob+" defaultValue="+userObject[0].dob+" required>"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Date Join : </label><input type='date' class='form-control' name='joining_date' id='input_name' defaultValue="+userObject[0].joining_date+" required>"+
+         "</div>"+
+        
+  
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+     "  <div class='col-lg-6'>"+
+          
+         "<label>Salary : </label><input type='number' class='form-control' name='salary' id='input_emp_id' min='100000' value="+userObject[0].salary+" placeholder="+userObject[0].salary+">"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>Phone-No : </label><input type='number' class='form-control' name='phone_no' id='input_name' value="+userObject[0].phone_no+" placeholder="+userObject[0].phone_no+ ">"+
+         "</div>"+
+        
+  
+   " </div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+       "<div class='col-lg-12'>"+
+        "<label>Address :</label>"+
+       "<textarea name='address' form='empForm' style='width:100%'  required>"+userObject[0].address+"</textarea>"+
+         "</div>"+
+    "</div>"+
+    "<div class='row' style='padding-top: 10px;'>"+
+         "<div class='col-lg-6'>"+
+          "<label>City : </label><input type='text' class='form-control' name='city' id='input_emp_id'value="+userObject[0].city+" placeholder="+userObject[0].city+" >"+
+         "</div>"+
+         "<div class='col-lg-6'>"+
+           "<label>State : </label><input type='text' class='form-control' name='state' id='input_name' value="+userObject[0].state+" placeholder="+userObject[0].state+">"+
+         "</div>"+
+         
+      
+  
+    "</div>"+
+         "<div class='row' style='padding-top: 10px;padding-left: 20%'>"+
+       
+         "<button class='btn btn-default btn-md' style='background-color: black;color: white' type='submit'>Edit</button>"+
+         "<button class='btn btn-default btn-md' style='position: relative;left: 30%' type='button' onclick='cancelEdit();'>Cancel</button>"+
+         
+    "</div>"+
+    "</form>";
+
+
+
+    var element = document.querySelectorAll('[placeholder]');
+
+    /* Loop through each found elements */
+    for (var i in element) {
+        /* If the element is a DOMElement and has the nodeName "INPUT" */
+        if (element[i].nodeType == 1 && element[i].nodeName == "INPUT") {
+
+            /* We change the value of the element to its placeholder attr value */
+            element[i].value = element[i].getAttribute('placeholder');
+            /* We change its color to a light gray */
+            element[i].style.color = "#777";
+
+            /* When the input is selected/clicked on */
+            element[i].onfocus = function (event) {
+                /* If the value within it is the placeholder, we clear it */
+                if (this.value == this.getAttribute('placeholder')) {
+                    this.value = "";
+                    /* Setting default text color */
+                    this.style.color = "#000";
+                };
+            };
+
+            /* We the input is left */
+            element[i].onblur = function (event) {
+                /* If the field is empty, we set its value to the placeholder */
+                if (this.value == "") {
+                    this.value = this.getAttribute('placeholder');
+                    this.style.color = "#777";
+                }
+            };
+        }
+    }
+
+  }
+
+var cancelEdit=function(){
+  console.log("hi");
+
+
+
+
+
+}
+/**/
+
+</script>
+
+</body>
+</html>

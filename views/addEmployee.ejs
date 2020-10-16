@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <style >
+    input {
+    position: relative;
+    width: 150px; height: 20px;
+    color: white;
+}
+
+input:before {
+    position: absolute;
+    top: 3px; left: 3px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+}
+
+input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#addME{
+  position:absolute;
+  top:10%;
+  left:25%;
+  width:45%;
+  height:30%;
+  border-radius: 5px;
+  background-color: white;
+
+}
+
+#warning{
+  position: relative;
+  top:10%;
+  left:17%;
+  font-size: 18px;
+}
+#closeBtn{
+  position: relative;
+  top:20%;
+  left:40%;
+}
+
+  </style>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CarShowroom</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="/addEmployee">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Orders <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">View Order</a></li>
+          <li><a href="#">Place Order</a></li>
+          <li><a href="#">Previous Order</a></li>
+        </ul>
+      </li>
+      <li ><a href="#">Products</a></li>
+      
+        <li class="dropdown active" ><a class="dropdown-toggle" data-toggle="dropdown" href="http://localhost:8000/employees">Employees <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/employees/addEmployee">New Employee</a></li>
+          <li><a href="/employees">View Employee</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <div class="row" style="padding-top: 5%">
+    <div class="col-lg" >
+      <h1 style="text-align: center;border-bottom: 2px solid black">Add New Employee</h1>
+      <div class="row" style="padding-left: 18%;box-shadow: 2px 2px 8px 8px grey;padding-bottom: 3%;padding-top: 3%" >
+        <form id="empForm" action="/employees/addEmployee" method="POST">
+        <div class="col-lg-5">
+          <h3 style="border-bottom: 2px solid black;text-align: center;">Personal Info</h3>
+          <div class="row"> 
+            <div class="form-group">
+              <label> Name:</label>
+              <input type="text" class="form-control" name="name" required>
+              <div class="form-group">
+               <label> Address :</label><br>
+              <textarea name="address" form="empForm" style="width:100%" required>Enter text Here</textarea>
+             </div>
+            </div>
+            <div class="form-group">
+              <label> DOB:</label>
+              <input type="date" class="form-control" name="dob" placeholder="yyyy-mm-dd" required>
+             
+
+
+            </div>
+            <div class="form-group">
+              <label> City :</label><br>
+                <input type="text" class="form-control" name="city">
+              <label> State :</label><br>
+              <input type="text" class="form-control" name="state">
+            </div>
+            
+            
+          </div>
+
+        </div>
+        <div class="col-lg-5">
+          <h3 style="border-bottom: 2px solid black;text-align: center;" >Employee Info</h3>
+          <div class="row" style="padding-left: 10%"> 
+            <div class="form-group" >
+              <label> New EMP-ID:</label>
+              <input type="text" class="form-control" name="emp_id" required>
+            </div>
+            <div class="form-group">
+               <label> Date Of Join:</label>
+              <input type="date" class="form-control" name="joining_date" required>
+              
+          
+                <label> Salary:</label>
+              <input type="number" class="form-control" name="salary" min="100000" required>
+            </div>
+            <div class="form-group">
+              <label>Phone-No: </label>
+              <input type="number" class="form-control" name="phone_no" required>
+              
+            </div>
+            
+            <button type="submit" class="btn btn-default btn-lg" style="position: relative;left:40%;background-color: black;color: white">Submit</button>
+          </div>
+        </div>
+
+        </form>
+       
+        </div>
+         <div class="row">
+          <h5>hello</h5>
+      </div>
+      <div class="row" style="padding-left: 40%"></div>
+
+    </div>
+    </div>
+
+</div>
+
+</div>
+
+<div id="overlay">
+  <div class="container-fluid" id="addME">
+    <div id="warning" >
+      <p>There was some error in the input you have provided.<br>Please porvide the inputs in proper format</p>
+    </div>
+    <div id="closeBtn">
+      <button onclick="off();" class="btn btn-default btn-lg" style="background-color: black;color: white">click</button>
+    </div>
+    
+  </div>
+  
+</div>
+<script>
+  $("input").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
+
+ function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+
+let error=<%-JSON.stringify(err)%>;
+console.log(error);
+
+if(error){
+  on();
+}
+
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+
+
+</script>
+</body>
+</html>

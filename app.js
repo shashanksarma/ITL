@@ -7,7 +7,9 @@ var employee=require('./routes/employee');
 var login=require('./routes/login');
 var placeOrder=require('./routes/placeOrder');
 var order=require('./routes/order');
+var product = require('./routes/products');
 const passport=require('passport');
+const jwt = require('jsonwebtoken');
 var session=require("express-session");
 var cookieParser=require("cookie-parser");
 const mysqlConnection=require("./connections");
@@ -24,6 +26,7 @@ app.use(session({secret:"supernova",saveUninitialized:true,resave:true}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/product",routes);
+app.use(express.json());
 
 var checkLog=function(req,res,next){
 
@@ -38,6 +41,7 @@ var checkLog=function(req,res,next){
 
 
 app.use('/',login);
+app.use('/product',product);
 app.use('/employees',employee);
 app.use('/order',placeOrder);
 app.use('/order',order);

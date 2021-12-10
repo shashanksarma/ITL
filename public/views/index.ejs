@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	
+	<script src="https://apis.google.com/js/platform.js" async defer></script> 
+	<meta name="google-signin-client_id" content="1073147157772-l6okdf2nsaofhu63464aiulp8bbqchqb.apps.googleusercontent.com">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
@@ -63,6 +64,7 @@
 						<button class="login100-form-btn" type="submit">
 							Login
 						</button>
+						<div class="g-signin2" data-onsuccess="onSignIn"></div>
 						<div style="position: relative;left:5%;padding-top: 3%;">
 							<p>New Manager? <a href="/signUp" style="text-decoration: underline">Sign-Up</a></p>
 						</div>
@@ -75,6 +77,21 @@
 	
 
 	<div id="dropDownSelect1"></div>
+	
+	<script>
+		// function onSignIn(googleUser) {
+		// 	var id_token = googleUser.getAuthResponse().id_token;
+  		// 	console.log('ID Token: ' + id_token); // This is null if the 'email' scope is not present.
+
+		// 	var xhr = new XMLHttpRequest();
+		// 	xhr.open('POST', '/login');
+		// 	xhr.setRequestHeader('Content-Type', 'application/json');
+		// 	// xhr.onload = function() {
+		// 	// //   console.log('Signed in as: ' + xhr.responseText);
+		// 	// };
+		// 	xhr.send(JSON.stringify({token : id_token}));
+		// }
+	</script>
 	
 <!--===============================================================================================-->
 	<script src="../vendor/jquery/jquery-3.2.1.min.js"></script>

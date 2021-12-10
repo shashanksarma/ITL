@@ -12,7 +12,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-
+const accountSid = 'ACc53acc5356e23f0a648bf31875179e81'; 
+const authToken = 'cbc647848ad5ff875fee7042d7a2be1f'; 
+const client = require('twilio')(accountSid, authToken); 
 
 
 var db = mysql.createConnection({
@@ -61,7 +63,7 @@ db.connect(function(err) {
   let sql="SELECT * FROM Orders";
   db.query(sql,function(err,result){
 		if(err) throw err;
-		console.log(result);
+		// console.log(result);
 		
 	});
 
@@ -136,6 +138,15 @@ router.post("/createOrder",check,function(req,res){
 
 		if(err) throw err;
 		console.log(result,"hi1");
+
+		client.messages 
+		  .create({ 
+		  	body: `Hello ${body.client_name} ,your order for Car ${body.car_id} has been confirmed!. Delivery By ${body.dely_date} to Address : ${body.client_addr}`, 
+		  	from: 'whatsapp:+14155238886',       
+		  	to: `whatsapp:+91${body.phone2}` 
+		  }) 
+		  .then(message => console.log(message.sid)) 
+		  .done();
 
 		if(result.length){
 

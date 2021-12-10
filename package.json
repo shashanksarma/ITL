@@ -17,14 +17,19 @@
   },
   "homepage": "https://github.com/DBMS-Mini-Project/Bhushan-Project#readme",
   "dependencies": {
-    "body-parser": "*",
+    "body-parser": "^1.19.0",
     "chart.js": "^2.9.3",
     "cookie-parser": "*",
     "ejs": "^3.1.5",
     "express": "*",
     "express-session": "*",
+    "google-auth-library": "^7.10.2",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "*",
-    "passport": "*",
-    "passport-local": "*"
-  }
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.0",
+    "passport-local": "*",
+    "twilio": "^3.71.2"
+  },
+  "devDependencies": {}
 }

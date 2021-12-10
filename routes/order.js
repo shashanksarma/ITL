@@ -26,7 +26,7 @@ db.connect(function(err) {
   let sql ="SELECT  car_id FROM car_details";
   db.query(sql,function(err,result){
 		if(err) throw err;
-		console.log(result);
+		// console.log(result);
 		
   });
   

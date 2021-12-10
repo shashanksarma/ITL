@@ -8,6 +8,14 @@
   <link rel="stylesheet" href="../css/neworder.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- Map -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 </head>
 
 <style >
@@ -148,7 +156,7 @@
                     <td class="c1">Client Name -</td>
                     <td class="c2"><input type="text" name="client_name"></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td class="c1">Address -</td>
                     <td class="c2">
                     <textarea name="client_addr" rows="3" columns="12" style="width:200px;" required></textarea></td>
@@ -157,7 +165,8 @@
                     <td class="c1">City -</td>
                     <td class="c2">
                     <input type="text" name="city" rows="3" columns="12" style="width:200px;" required></td>
-                </tr>
+                </tr> -->
+                <input type="text" name="client_addr" id="twilio" style="display: none;">
                 <tr>
                     <td class="c1">Phone No -</td><td class="c2">
                     <input type="text" name="phone2" size="13" required> &nbsp;
@@ -169,6 +178,50 @@
                 </tr>
             </table>
         </fieldset>
+        <fieldset class="fields" id="mapss">
+          <h4>MAP: </h4><hr>
+          <div id='map' style='width: 100%; height: 450px;'></div>
+
+          <!-- <table class="inp">
+              <tr>
+                  <td class="c1">Employee ID -</td>
+                  <td class="c2"><input list="Employees" name="emp_id" placeholder="Search.." id="emp_id" required>
+                  <datalist id="Employees">
+                   <%emp_id.forEach(function(item){%>
+                   <option value="<%=item.emp_id%>">
+                   <%})%>   
+                  </datalist></td>
+              </tr>
+              <tr>
+                  <td class="c1">Client Name -</td>
+                  <td class="c2"><input type="text" name="client_name"></td>
+              </tr>
+              <tr>
+                  <td class="c1">Address -</td>
+                  <td class="c2">
+                  <textarea name="client_addr" rows="3" columns="12" style="width:200px;" required></textarea></td>
+              </tr>
+              <tr>
+                <td class="c1">Map: </td>
+                <td class="c2">
+                  <div id='map' style='width: 50px; height: 50px;' ></div>
+            </tr>
+              <tr>
+                  <td class="c1">City -</td>
+                  <td class="c2">
+                  <input type="text" name="city" rows="3" columns="12" style="width:200px;" required></td>
+              </tr>
+              <tr>
+                  <td class="c1">Phone No -</td><td class="c2">
+                  <input type="text" name="phone2" size="13" required> &nbsp;
+                  </td>
+              </tr>
+              <tr>
+                  <td class="c1">Email ID -</td>
+                  <td class="c2"><input type="email" name="email" required></td>
+              </tr>
+          </table> -->
+      </fieldset>
         <fieldset class="fields" id="paym_details">
             <h4 class="Legends">PAYMENT</h4><hr>
                 <div class="row"><div class="col-sm-4" style="padding-bottom: 10px">Payment Method</div></div>
@@ -225,6 +278,63 @@
   
 </div>
 </body>
+
+<!-- MAP SCRIPT -->
+
+<script>
+  // TO MAKE THE MAP APPEAR YOU MUST
+  // ADD YOUR ACCESS TOKEN FROM
+  // https://account.mapbox.com
+  mapboxgl.accessToken = 'pk.eyJ1IjoidmF0c2ExMTAxIiwiYSI6ImNrd2FjNHllNDBobW0ydXFsbjNqNTFlanIifQ.xJXhRZuIOmPPhWOduJ7tbw';
+  const map = new mapboxgl.Map({
+      container: 'map', // container ID
+      style: 'mapbox://styles/mapbox/streets-v11', // style URL
+      center: [72.883320,19.088135], // starting position [lng, lat]
+      zoom: 11 // starting zoom
+  });
+
+  // Add the control to the map.
+  var geoCoder = new MapboxGeocoder({
+  accessToken: mapboxgl.accessToken,
+  mapboxgl: mapboxgl
+  })
+  map.addControl(geoCoder);
+
+  geoCoder.on('result', function(results) {
+   console.log(results.result.place_name);
+   document.getElementById('twilio').value = results.result.place_name;
+})
+
+  map.on('click', (e) => {
+    // console.log(e);
+    // {
+    //     lngLat: {
+    //         lng: 40.203,
+    //         lat: -74.451
+    //     },
+    //     originalEvent: {...},
+    //     point: {
+    //         x: 266,
+    //         y: 464
+    //     },
+    //      target: {...},
+    //      type: "click"
+    // }
+});
+
+  // const marker = new mapboxgl.Marker({color : "#FF0000"})
+  // .setLngLat([72.927944 ,19.141701])
+  // .addTo(map);
+
+  // const marker1 = new mapboxgl.Marker({color : "#FF0000"})
+  // .setLngLat([72.837532, 19.072198])
+  // .addTo(map);
+
+  // const marker2 = new mapboxgl.Marker({color : "#FF0000"})
+  // .setLngLat([72.895637, 19.058496])
+  // .addTo(map);
+  </script>
+
 <script >
 
     let emp_id=<%-JSON.stringify(emp_id)%>

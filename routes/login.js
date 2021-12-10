@@ -1,12 +1,20 @@
 const express=require('express');
 const bodyParser=require('body-parser');
+var cookieParser=require("cookie-parser");
 const app=express();
 const passport=require('passport');
 var LocalStrategy=require("passport-local");
 const mysql=require('mysql');
+const jwt = require('jsonwebtoken');
 var session=require("express-session");
 
 const router=express.Router();
+
+//Google Auth
+const {OAuth2Client} = require('google-auth-library');
+const CLIENT_ID = '1073147157772-l6okdf2nsaofhu63464aiulp8bbqchqb.apps.googleusercontent.com'
+const client = new OAuth2Client(CLIENT_ID);
+//
 
 app.set('view engine','ejs');
 
@@ -56,7 +64,7 @@ db.connect(function(err) {
   let sql="DESC car_details";
   db.query(sql,function(err,result){
 		if(err) throw err;
-		console.log(result);
+		// console.log(result);
 		
 	});
 
@@ -88,7 +96,8 @@ passport.use("local-signUp",new LocalStrategy({passReqToCallback:true},
 	function(req,username,password,done){
 
 		console.log(username,password);
-		let sql="SELECT emp_id FROM perSign where emp_id='"+username+"'";
+		console.log("BRUHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhhh");
+		let sql="SELECT emp_id FROM perSign where emp_id='"+"E00002"+"'"; // username
 		db.query(sql,function(err,result){
 
 			if(err) throw err;
@@ -172,6 +181,13 @@ router.get("/home",function(req,res){
 
 
 
+//////////////MAPP
+
+router.get("/map", function(req,res){
+	res.render("map");
+})
+
+/////////////
 
 
 
@@ -196,10 +212,74 @@ router.post("/signUp",passport.authenticate('local-signUp',{
 	failureRedirect:"/signUp?condition=emp-id already exists or you don't have access"
 }))
 
-router.post("/login",passport.authenticate("local-sigin",{
+let googleSignIn = function(req,res,next){
+	let token = req.body.token;
+	console.log(token, "DHSAUOIHDASUODUIO");
+
+	async function verify() {
+	  const ticket = await client.verifyIdToken({
+	  	idToken: token,
+	  	audience: CLIENT_ID, 
+	  });
+	  const payload = ticket.getPayload();
+	  const userid = payload['sub'];
+	  console.log(payload);
+	}
+	verify().
+	// then(()=>{
+	// 	res.cookie('session-token', token);
+	// 	res.send('success');
+	// }).
+	catch(console.error);
+	next();
+}
+
+// var refreshTokens = [];
+
+// router.delete("/logout", (req,res) => {
+// 	refreshTokens = refreshTokens.filter(token => token !== req.body.token)
+// 	res.sendStatus(204);
+// })
+
+// router.post("/token", (req,res)=>{
+// 	let refreshToken = req.body.refreshToken;
+// 	if(refreshToken == null) return res.sendStatus(401);
+// 	if(!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+// 	jwt.verify(refreshToken, "ITLExperiment7Refresh", (err,user)=>{
+// 		if(err) return res.sendStatus(403)
+// 		const accessToken = jwt.sign({username : user.username, password : user.password}, "ITLExperiment7", { expiresIn : '30s'});
+// 		res.json({accessToken : accessToken});
+// 	})
+// })
+
+router.post("/login",
+
+//ASAL
+googleSignIn, passport.authenticate("local-sigin",{
 	successRedirect:"/employees",
 	failureRedirect:"/login?condition=incorrect password or emp-id"
 }));
+
+
+
+
+
+//JWT WALA
+// (req,res)=>{
+// 	console.log(req.body);
+// 	let userObject = {
+// 		username : req.body.username,
+// 		password : req.body.password
+// 	};
+// 	let accessToken = jwt.sign(userObject, 'ITLExperiment7', { expiresIn : '10m'});
+// 	let refreshToken = jwt.sign(userObject, 'ITLExperiment7Refresh');
+// 	refreshTokens.push(refreshToken);
+// 	res.json({ accessToken : accessToken, refreshToken : refreshToken });
+// });
+
+
+
+
 
 
 router.get("/logout",function(req,res){

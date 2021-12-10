@@ -3,7 +3,7 @@ const app=express();
 const bodyParser=require('body-parser');
 const path = require('path');
 const mysql=require('mysql');
-
+const jwt = require('jsonwebtoken');
 const router=express.Router();
 
 app.set('view engine','ejs');
@@ -38,7 +38,7 @@ db.connect(function(err) {
   let sql="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id,customer.name FROM Employee,Orders,customer where Employee.emp_id=Orders.emp_id AND customer.cust_id=Orders.cust_id AND Employee.emp_id='E00001'";
   db.query(sql,function(err,result){
 		if(err) throw err;
-		console.log(result);
+		// console.log(result);
 
 	});
 
@@ -50,11 +50,128 @@ db.connect(function(err) {
 //   console.log(req.body);
 // })
 
+// router.get("/",jwtAuthentication, async (req,res)=>{
+// 	try{
+// 		let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold,persign.emp_id as per,tempSign.emp_id as temp FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id LEFT JOIN persign ON Employee.emp_id=persign.emp_id LEFT JOIN tempSign ON Employee.emp_id=tempSign.emp_id GROUP BY Employee.emp_id order by cars_sold desc LIMIT 4";
+// 		let check;
+// 		let result1
+// 		db.query(sql,function(err,result){
+// 			console.log(result);
+// 			result1=result;
+// 			res.status(200).json({
+// 				result: result1,
+// 				success: true,
+// 			});
+// 		})
+		
+// 	} catch(error){
+// 		return res.status(400).json({
+// 			error: true,
+// 			details: error,
+// 			result: {},
+// 		  });
+// 	}
+// })
+
+// router.post("/createEmployee", jwtAuthentication,function(req,res){
+
+// 	console.log(req.body);
+// 	let info=req.body;
+// 	let sql="INSERT INTO Employee (emp_id, name, address, city, state, dob, joining_date, salary, phone_no) VALUES('"+info.emp_id+"','"+info.name+"','"+info.address+"','"+info.city+"','"+info.state+"','"+info.dob+"','"+info.joining_date+"',"+info.salary+","+info.phone_no+")";
+// 	console.log(sql);
+// 	db.query(sql,function(err,result){
+// 		if(err){
+// 			console.log(err);
+// 		}
+// 		else{
+// 			let sql1 = "SELECT * FROM Employee WHERE emp_id = '"+ info.emp_id+"'";
+// 			db.query(sql1, function(err,resu){
+// 				res.status(200).json({
+// 					status: {
+// 						statusCode: "0",
+// 						statusDesc: "Success",
+// 					},
+// 					result: resu[0],
+// 					success: true,
+// 				});
+// 			})
+// 			console.log(result);	
+// 		}
+// 	})
+// });
+
+// router.put("/updateEmployee",function(req,res){
+
+// 	let update=req.body;
+
+// 	if(update){
+
+// 		let query1 = "SELECT * FROM Employee WHERE emp_id = '"+ update.where +"'";
+// 		console.log(query1);
+// 		db.query(query1, function(err, result5){
+// 			console.log(result5);
+// 			let result2 = result5[0];
+
+// 			let sql="UPDATE Employee set emp_id='"+(update.emp_id?update.emp_id:result2.emp_id) +"',name='"+(update.name?update.name:result2.name) + "', address='"+ (update.address?update.address:result2.address) +"',city='"+ (update.city?update.city:result2.city) + "',state='"+ (update.state?update.state:result2.state) +"',salary="+ (update.salary?update.salary:result2.salary) +",phone_no="+ (update.phone_no?update.phone_no:result2.phone_no) + " where emp_id='"+update.where+"'";
+// 			console.log(sql);
+// 			db.query(sql,function(err,result){
+
+// 				if(err){
+// 					console.log(err);
+// 					res.redirect("/employees/viewEmployee?emp_id="+update.where+"&&update=error");
+// 					res.json({done:false})
+// 				} else{
+// 					console.log(result);
+
+// 					sql="SELECT *FROM Employee where emp_id='"+update.where+"'";
+// 					db.query(sql,function(err,result1){
+// 						console.log(result1,"djasid");
+// 						res.status(200).json({
+// 							status: {
+// 								statusCode: "0",
+// 								statusDesc: "Success",
+// 							},
+// 							result: result1[0],
+// 							success: true,
+// 						});
+// 					})
+// 					// res.redirect("/employees/viewEmployee?emp_id="+update.emp_id+"&&update=done");
+// 				}
+// 			})
+// 		})
+// 		} else{
+// 			return res.status(400).json({
+// 				error: true,
+// 				result: {},
+// 			});
+// 		}
+
+// });
+
+// router.delete("/delEmployee",function(req,res){
+
+// 	console.log(req.body);
+
+// 	let sql="DELETE FROM Employee where Employee.emp_id='"+req.body.item+"'";
+// 	console.log(sql);
+// 	db.query(sql,function (err,result) {
+// 		if(err){
+// 			console.log(err);
+// 			res.json({item:req.body.item,done:false})
+// 		}else{
+// 			console.log(result);
+// 		res.json({result:result,done:true,item:req.body.item});
+// 		}
+
+// 	})
+// });
+
 
 router.get("/",function(req,res){
+	let result3;
 	if(req.user){
 		let mainObject;
-	console.log(req.user);
+	// console.log(req.user);
 	//let sql ="SELECT * FROM Employee where emp_id IN(SELECT emp_id FROM orders GROUP BY emp_id HAVING COUNT(emp_id)>2)";
 	//let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee,Orders  where Employee.emp_id=Orders.emp_id GROUP BY Orders.emp_id";
 	//let sql ="SELECT Employee.emp_id,Employee.name,Employee.joining_date,COUNT(Orders.emp_id) AS cars_sold FROM Employee  LEFT JOIN Orders ON Employee.emp_id=Orders.emp_id GROUP BY Employee.emp_id order by cars_sold desc LIMIT 4";
@@ -62,6 +179,7 @@ router.get("/",function(req,res){
 	let check;
 	db.query(sql,function(err,result){
 		console.log(result);
+		result3 = result;
 		let sql1="SELECT YEAR(dely_date) AS YEAR FROM Orders GROUP BY YEAR(dely_date)";
 		db.query(sql1,function(err,result1) {
 
@@ -82,6 +200,7 @@ router.get("/",function(req,res){
 		res.redirect('/login');
 	}
 
+	return result3;
 
 	//res.sendFile(path.join(__dirname,"./public","/Employee.html"));
 
@@ -243,23 +362,9 @@ router.post("/filterEmployee",function(req,res){
 });
 
 
+// router.post("/deleteEmp", async (req,res)=>{
 
-router.post("/delEmployee",function(req,res){
-
-	console.log(req.body);
-
-	let sql="DELETE FROM Employee where Employee.emp_id='"+req.body.item+"' ";
-	console.log(sql);
-	db.query(sql,function (err,result) {
-		if(err){
-			res.json({item:req.body.item,done:false})
-		}else{
-			console.log(result);
-		res.json({result:result,done:true,item:req.body.item});
-		}
-
-	})
-});
+// })
 
 router.get("/addEmployee",function(req,res){
 
@@ -298,6 +403,15 @@ router.post("/addEmployee",function(req,res){
 	//res.render('addEmployee');
 
 });
+
+
+
+// router.post("/updateEmployee", (req,res)=>{
+// 	let emp_id = req.body.emp_id;
+// 	if(emp_id){
+// 		let sql="SELECT * FROM Employee where emp_id='"+emp_id+"'";
+// 	}
+// })
 
 
 router.get("/viewEmployee",function(req,res){
@@ -452,49 +566,6 @@ router.get("/viewAllOrders",function(req,res){
 
 });
 
-router.post("/updateEmployee",function(req,res){
-
-	console.log(req.body);
-	let update=req.body;
-
-	if(update){
-
-		let sql="UPDATE Employee set emp_id='"+update.emp_id+"',name='"+update.name+"', address='"+update.address+"',city='"+update.city+"',state='"+update.state+"',dob='"+update.dob+"',joining_date='"+update.joining_date+"',salary="+update.salary+",phone_no="+update.phone_no+" where emp_id='"+update.where+"'";
-		db.query(sql,function(err,result){
-
-			if(err){
-				console.log(err);
-				//res.redirect("/employees/viewEmployee?emp_id="+update.where+"&&update=error");
-				res.json({done:false})
-			} else{
-				console.log(result);
-
-				sql="SELECT *FROM Employee where emp_id='"+update.emp_id+"'";
-				db.query(sql,function(err,result1){
-					console.log(result1);
-					//res.redirect("/employees/viewEmployee?emp_id="+update.emp_id+"&&update=done");
-					let update=result1;
-					res.json({done:true,update});
-
-				})
-
-
-			}
-
-		})
-
-
-
-
-	} else{
-
-		res.redirect("/employees");
-
-	}
-
-
-});
-
 
 router.post("/giveAccess",function(req,res){
 
@@ -559,22 +630,31 @@ router.post("/takeAccess",function(req,res){
 				res.redirect("/employees");
 
 			})
-
-
-
 		}
-
-
-
 	})
-
-
-
-
-
-
-
 });
+
+
+
+
+
+///JWT
+
+function jwtAuthentication(req,res,next){
+	let authHeader = req.headers['authorization'];
+	const token = authHeader && authHeader.split(' ')[1];
+	console.log(authHeader, "AUTHHEADER<-----------------");
+	console.log(token);
+	
+	if(token == null) return res.sendStatus(401);
+
+	jwt.verify(token, 'ITLExperiment7', (err,user)=>{
+		if(err) return res.sendStatus(403);
+		req.user = user;
+		console.log(req.user);
+		next();
+	})
+}
 
 
 

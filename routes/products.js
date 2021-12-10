@@ -1,9 +1,8 @@
 const express=require('express');
 const app=express();
-const bodyParser=require('body-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
 const mysql=require('mysql');
-const mysqlConnection=require("../connections");
 const Router= express.Router(); //initialize a router
 
 
@@ -23,14 +22,35 @@ var checkk= function(req,res,next){
 
 }
 
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database : "CarShowroom"
+  
+  });
+
+db.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  let sql ="SELECT  car_id FROM car_details";
+  db.query(sql,function(err,result){
+		if(err) throw err;
+		// console.log(result);
+		
+  });
+  
+});
+
 
 Router.get("/",function(req,res){
-  console.log(req.user);
+  console.log(req.user, "PRODUCCCCCCCCCCTTTTTTTT");
     let sql="SELECT car_details.car_id,car_details.model_no,car_details.type,car_details.price,car_details.transmission,COUNT(orders.car_id) AS cars_sold from car_details LEFT JOIN orders ON car_details.car_id=orders.car_id GROUP BY car_details.car_id ORDER BY cars_sold DESC LIMIT 6;";
-    mysqlConnection.query(sql, (err,rows,fields)=>{
+    db.query(sql, (err,rows,fields)=>{
+		console.log("BRUH");
       if(err) throw err;
-      console.log(rows,);
-      res.render("product",{rows:rows,user:req.user});
+      console.log(rows);
+	  res.render("product",{rows:rows,user:req.user});
     })
 });
 
@@ -45,11 +65,11 @@ Router.get("/addproduct",checkk,function(req,res){
 })
 
 Router.post("/addproduct",function(req,res){
-  console.log(req.body);
+  console.log(req.body, "REQ.BODY IS HEREEEEEEEEEEEEEEEEEEee");
   let info=req.body;
   let sql1="INSERT INTO car_details VALUES('"+info.car_id+"',"+info.price+",'"+info.fuel_type+"','"+info.model_no+"',"+info.year+","+info.qty_available+",'"+info.transmission+"',"+info.capacity+",'"+info.type+"')";
   console.log(sql1);
-  mysqlConnection.query(sql1, (err,result,fields)=>{
+  db.query(sql1, (err,result,fields)=>{
     if(err){
 		throw err;
 			//res.redirect("/product/addproduct?err=true");
@@ -69,7 +89,7 @@ Router.get("/viewProduct",function(req,res){
 		console.log("hii",req.query.update);
 		let userObject;
 		let sql="SELECT * FROM car_details where car_id='"+car_id+"'";
-		mysqlConnection.query(sql,function(err,result){
+		db.query(sql,function(err,result){
 
 			if(err){
           // console.log("Bhushannnnnn3");
@@ -81,7 +101,7 @@ Router.get("/viewProduct",function(req,res){
 				let sellObject;
 
 				let sql1="SELECT YEAR(dely_date),COUNT(YEAR(dely_date)) AS cars_sold,car_details.car_id FROM car_details LEFT JOIN orders ON car_details.car_id=Orders.car_id where car_details.car_id='"+car_id+"' GROUP BY YEAR(dely_date)";
-				mysqlConnection.query(sql1,function(err,result1){
+				db.query(sql1,function(err,result1){
 
 					if(err){
 						//res.redirect("/employees");
@@ -93,7 +113,7 @@ Router.get("/viewProduct",function(req,res){
 						let orderObject;
 
 						let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM car_details,Orders where car_details.car_id=Orders.car_id AND car_details.car_id='"+car_id+"' order by Orders.dely_date desc LIMIT 3";
-						mysqlConnection.query(sql2,function(err,result2){
+						db.query(sql2,function(err,result2){
 
 							if(err){
 								console.log(err);
@@ -131,7 +151,7 @@ Router.get("/viewAllProducts",checkk,function(req,res){
 
 		let car_id=req.query.car_id;
 		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM car_details,Orders where car_details.car_id=Orders.car_id AND car_details.car_id='"+car_id+"'";
-		mysqlConnection.query(sql2,function(err,result){
+		db.query(sql2,function(err,result){
 
 			if(err){
 				throw err;
@@ -152,7 +172,7 @@ Router.post("/updateProduct",function(req,res){
 	if(update){
 
 		let sql="UPDATE car_details set car_id='"+update.car_id+"',price="+update.price+", fuel_type='"+update.fuel_type+"',model_no='"+update.model_no+"',year="+update.year+",qty_available="+update.qty_available+",transmission='"+update.transmission+"',capacity="+update.capacity+",type='"+update.type+"' where car_id='"+update.where+"'";
-		mysqlConnection.query(sql,function(err,result){
+		db.query(sql,function(err,result){
 
 			if(err){
 				console.log(err);
@@ -161,7 +181,7 @@ Router.post("/updateProduct",function(req,res){
 			} else{
 				console.log(result);
 				sql="SELECT *FROM car_details where car_id='"+update.car_id+"'";
-				mysqlConnection.query(sql,function(err,result1){
+				db.query(sql,function(err,result1){
 					console.log(result1);
 					//res.redirect("/employees/viewEmployee?emp_id="+update.emp_id+"&&update=done");
 					let update=result1;
@@ -182,7 +202,7 @@ Router.post("/delProduct",function(req,res){
 
 	let sql="DELETE FROM car_details where car_details.car_id='"+req.body.item+"' ";
 	console.log(sql);
-	mysqlConnection.query(sql,function (err,result) {
+	db.query(sql,function (err,result) {
 		if(err){
 			res.json({item:req.body.item,done:false})
 		}else{
@@ -281,7 +301,7 @@ Router.post("/filterproduct",function(req,res){
   }
   if(entered){
 		console.log(sql2);
-		mysqlConnection.query(sql2,function(err,result){
+		db.query(sql2,function(err,result){
 		if(err) throw err;
 		console.log(result);
 		res.json({checkObject:result,user:req.user});
@@ -295,7 +315,7 @@ Router.post("/filterproduct",function(req,res){
 Router.get("/extras",function(req,res){
 
     let sql="SELECT extra.extra_id,extra.name,extra.price,extra.type,COUNT(orders.extra_id) AS extras_sold FROM extra LEFT JOIN orders ON extra.extra_id=orders.extra_id GROUP BY extra.extra_id ORDER BY extras_sold DESC LIMIT 4;";
-    mysqlConnection.query(sql, (err,rows,fields)=>{
+    db.query(sql, (err,rows,fields)=>{
       if(err) throw err;
       console.log(rows);
       res.render("extras",{rows:rows,user:req.user});
@@ -308,7 +328,7 @@ Router.post("/extras/delExtra",function(req,res){
 
 	let sql="DELETE FROM extra where extra.extra_id='"+req.body.item+"' ";
 	console.log(sql);
-	mysqlConnection.query(sql,function (err,result) {
+	db.query(sql,function (err,result) {
 		if(err){
 			res.json({item:req.body.item,done:false})
 		}else{
@@ -336,7 +356,7 @@ Router.post("/extras/addextras",function(req,res){
   console.log(reqBody);
   let sql="INSERT INTO extra VALUES('"+reqBody.extra_id+"','"+reqBody.name+"',"+reqBody.price+",'"+reqBody.type+"');";
   console.log(sql);
-  mysqlConnection.query(sql, (err,rows,fields)=>{
+  db.query(sql, (err,rows,fields)=>{
     if(err){
       res.redirect("/product/extras/addextras?err=true");
     }
@@ -355,7 +375,7 @@ Router.get("/extras/viewExtra",function(req,res){
 		console.log("hii",req.query.update);
 		let userObject;
 		let sql="SELECT * FROM extra where extra_id='"+extra_id+"'";
-		mysqlConnection.query(sql,function(err,result){
+		db.query(sql,function(err,result){
 
 			if(err){
           // console.log("Bhushannnnnn3");
@@ -367,7 +387,7 @@ Router.get("/extras/viewExtra",function(req,res){
 				let sellObject;
 
 				let sql1="SELECT YEAR(dely_date),COUNT(YEAR(dely_date)) AS extras_sold,extra.extra_id FROM extra LEFT JOIN orders ON extra.extra_id=Orders.extra_id where extra.extra_id='"+extra_id+"' GROUP BY YEAR(dely_date)";
-				mysqlConnection.query(sql1,function(err,result1){
+				db.query(sql1,function(err,result1){
 
 					if(err){
 						//res.redirect("/employees");
@@ -379,7 +399,7 @@ Router.get("/extras/viewExtra",function(req,res){
 						let orderObject;
 
 						let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM extra,Orders where extra.extra_id=Orders.extra_id AND extra.extra_id='"+extra_id+"' order by Orders.dely_date desc LIMIT 3";
-						mysqlConnection.query(sql2,function(err,result2){
+						db.query(sql2,function(err,result2){
 
 							if(err){
 								console.log(err);
@@ -420,7 +440,7 @@ Router.post("/extras/updateExtras",function(req,res){
 	if(update){
 
 		let sql="UPDATE extra set extra_id='"+update.extra_id+"',name='"+update.name+"', type='"+update.type+"',price="+update.price+" where extra_id='"+update.where+"'";
-		mysqlConnection.query(sql,function(err,result){
+		db.query(sql,function(err,result){
 
 			if(err){
 				console.log(err);
@@ -429,7 +449,7 @@ Router.post("/extras/updateExtras",function(req,res){
 			} else{
 				console.log(result);
 				sql="SELECT *FROM extra where extra_id='"+update.extra_id+"'";
-				mysqlConnection.query(sql,function(err,result1){
+				db.query(sql,function(err,result1){
 					console.log(result1);
 					//res.redirect("/employees/viewEmployee?emp_id="+update.emp_id+"&&update=done");
 					let update=result1;
@@ -448,7 +468,7 @@ Router.get("/extras/viewAllExtras",function(req,res){
 
 		let extra_id=req.query.extra_id;
 		let sql2="SELECT Orders.order_id,Orders.car_id ,Orders.date_order,Orders.dely_date,Orders.cust_id,Orders.extra_id FROM extra,Orders where extra.extra_id=Orders.extra_id AND extra.extra_id='"+extra_id+"'";
-		mysqlConnection.query(sql2,function(err,result){
+		db.query(sql2,function(err,result){
 
 			if(err){
 				throw err;
@@ -507,7 +527,7 @@ Router.post("/extras/filterextras",function(req,res){
   }
   if(entered){
 		console.log(sql2);
-		mysqlConnection.query(sql2,function(err,result){
+		db.query(sql2,function(err,result){
 		if(err) throw err;
 		console.log(result);
 		res.json({checkObject:result,user:req.user});
